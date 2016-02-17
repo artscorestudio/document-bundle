@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		<!-- Subscribers -->
+		<parameter key="asf_doc.subscriber.editors.class">ASF\DocumentBundle\Event\EditorsSubscriber</parameter>
+		
+		<!-- Widget -->
+		<parameter key="asf_doc.widget.factory.class">ASF\DocumentBundle\Document\Widget\WidgetFactory</parameter>
+		
+	</parameters>
+
+    <services>
+
+        <service id="asf_doc.subscriber.editors" class="%asf_doc.subscriber.editors.class%">
+        	<argument type="service" id="translator.default" />
+        	<argument type="service" id="security.context" />
+        	<tag name="kernel.event_subscriber" />
+        </service>
+        
+        <!-- WIDGETS -->
+        <service id="asf_doc.widget.factory" class="%asf_doc.widget.factory.class%" />
+
+    </services>
+    
+</container>

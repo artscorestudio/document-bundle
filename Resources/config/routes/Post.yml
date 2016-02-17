@@ -1,0 +1,21 @@
+asf_doc_post_list:
+    pattern: /list
+    defaults: { _controller: "ASFDocumentBundle:Post:list" }
+    
+asf_doc_post_add:
+    pattern: /add
+    defaults: { _controller: "ASFDocumentBundle:Post:edit" }
+    
+asf_doc_post_edit:
+    pattern: /edit/{id}
+    defaults: { _controller: "ASFDocumentBundle:Post:edit" }
+        
+asf_doc_post_delete:
+    pattern: /delete/{id}
+    defaults: { _controller: "ASFDocumentBundle:Post:delete" }
+    
+asf_doc_post_menu_node_list:
+    pattern: /menu/node/list
+    defaults: { _controller: "ASFDocumentBundle:Post:list" }
+    options:
+        expose: true

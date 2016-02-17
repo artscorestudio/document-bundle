@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+
+{% trans_default_domain 'asf_doc' %}
+
+{% block stylesheets %}
+{{ parent() }}
+{% stylesheets '@AsfDocumentBundle/Resources/public/less/*' %}
+	<link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+{% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{% javascripts '@AsfDocumentBundle/Resources/public/js/*' %}
+	<script src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock %}

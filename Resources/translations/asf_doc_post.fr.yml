@@ -1,0 +1,18 @@
+Add new post: "Ajouter un nouveau billet"
+Posts list: "Liste des billets de blog"
+this post: "ce billet de blog"
+
+# Messages
+Created successfully: "Le billet de blog a bien été créé."
+Updated successfully: "Le billet a bien été mis à jour."
+"Post's author not found": L'auteur du billet est inrouvable"
+An error occurs when generating or getting the post: "Une erreur est survenue lors de la récupération ou de la création du billet de blog."
+'The post "%name%" successfully deleted': "Le billet \"%name%\" a bien été supprimé." 
+'No posts was found.': "Pas de billets."
+
+# Fields
+Slug: "Url"
+Content: "Contenu"
+Author: "Auteur"
+New post: "Nouveau billet"
+new-post: "nouveau-billet"

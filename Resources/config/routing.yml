@@ -1,0 +1,7 @@
+asf_doc_bundle_page:
+    resource: "@ASFDocumentBundle/Resources/config/routes/Page.yml"
+    prefix:   /page
+    
+asf_doc_bundle_post:
+    resource: "@ASFDocumentBundle/Resources/config/routes/Post.yml"
+    prefix:   /post

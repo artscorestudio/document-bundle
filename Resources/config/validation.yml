@@ -1,0 +1,10 @@
+ASF\DocumentBundle\Entity\Page:
+    properties:
+         title:
+            - NotBlank: ~
+         slug:
+            - NotBlank: ~
+            - Regex: "/^[a-z0-9-]+$/"
+         state:
+            - NotBlank: ~
+            - Choice: { callback: getStates }

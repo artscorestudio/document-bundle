@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
+	http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+	
+	<entity name="ASF\DocumentBundle\Entity\Post" table="asf_doc_post">
+		
+		<many-to-one field="author" target-entity="ASF\DocumentBundle\Model\Post\PostAuthorInterface">
+			<join-column name="author_id" referenced-column-name="id" nullable="true" />
+		</many-to-one>
+		
+		<one-to-one field="original" target-entity="Post">
+			<join-column name="original_id" referenced-column-name="id" nullable="true" />
+		</one-to-one>
+		
+	</entity>
+	
+</doctrine-mapping>
