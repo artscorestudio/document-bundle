@@ -9,13 +9,15 @@
  */
 namespace ASF\DocumentBundle\Model\Post;
 
+use ASF\DocumentBundle\Model\Document\DocumentInterface;
+
 /**
  * Interface for the relation between Page entity and entity used for author attribute
  * 
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-interface PostInterface
+interface PostInterface extends DocumentInterface
 {
 	/**
 	 * @return ASF\DocumentBundle\Model\Page\PageAuthorInterface

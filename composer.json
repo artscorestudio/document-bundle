@@ -18,8 +18,7 @@
 	"require" : {
 		"php": ">=5.5.9",
         "symfony/framework-bundle": "~3.0",
-        "sensio/framework-extra-bundle": "~3.0",
-        "artscorestudio/core-bundle": "~1.0"
+        "sensio/framework-extra-bundle": "~3.0"
 	},
 	"require-dev" : {
 		"phpunit/phpunit": "5.1.*",
