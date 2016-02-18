@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		
+		<!-- Document Manager -->
+		<parameter key="asf_doc.document.manager.class">ASF\DocumentBundle\Entity\Manager\DocumentManager</parameter>
+		<parameter key="asf_doc.document.entity.class">ASF\DocumentBundle\Entity\Document</parameter>
+		
+		<!-- Page Manager -->
+		<parameter key="asf_doc.page.manager.class">ASF\DocumentBundle\Entity\Manager\PageManager</parameter>
+		<parameter key="asf_doc.page.entity.class">ASF\DocumentBundle\Entity\Page</parameter>
+
+		<!-- Post Manager -->
+		<parameter key="asf_doc.post.manager.class">ASF\DocumentBundle\Entity\Manager\PostManager</parameter>
+		<parameter key="asf_doc.post.entity.class">ASF\DocumentBundle\Entity\Post</parameter>
+
+	</parameters>
+
+    <services>
+        
+        <!-- ENTITY MANAGERS -->
+        <service id="asf_doc.document.manager" class="%asf_doc.document.manager.class%">
+            <tag name="asf_core.manager" entity="asf_doc.document.entity.class" />
+        </service>
+        
+		<service id="asf_doc.page.manager" class="%asf_doc.page.manager.class%">
+            <tag name="asf_core" entity="%asf_doc.page.entity.class%" />
+        </service>
+        
+        <service id="asf_doc.post.manager" class="%asf_doc.post.manager.class%">
+            <tag name="asf_core" entity="%asf_doc.post.entity.class%" />
+        </service>
+
+    </services>
+    
+</container>
