@@ -26,7 +26,7 @@
 	},
 	"autoload" : {
 		"psr-4" : {
-			"ASF\\DocumentBundle" : ""
+			"ASF\\DocumentBundle\\" : ""
 		}
 	},
 	"minimum-stability" : "dev"
