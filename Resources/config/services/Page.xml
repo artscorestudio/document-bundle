@@ -5,11 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
 	<parameters>
-		
-		<!-- Manager -->
-		<parameter key="asf_doc.page.manager.class">ASF\DocumentBundle\Entity\Manager\PageManager</parameter>
-		<parameter key="asf_doc.page.manager.entity.class">ASF\DocumentBundle\Entity\Page</parameter>
-
+	
 		<!-- Forms -->
 		<parameter key="asf_doc.form.page.type.class">ASF\DocumentBundle\Form\Type\PageFormType</parameter>
 		<parameter key="asf_doc.form.page.handler.class">ASF\DocumentBundle\Form\Handler\PageFormHandler</parameter>
@@ -17,13 +13,7 @@
 	</parameters>
 
     <services>
-        
-        <!-- ENTITY MANAGER -->
-		<service id="asf_doc.page.manager" class="%asf_doc.page.manager.class%">
-            <argument type="service" id="service_container" />
-            <argument>%asf_doc.page.manager.entity.class%</argument>
-        </service>
-
+    
 		<!-- FORMS -->
 		<service id="asf_doc.form.page" factory-method="create" factory-service="form.factory" class="Symfony\Component\Form\Form">
         	<argument type="service" id="asf_doc.form.page.type" />
