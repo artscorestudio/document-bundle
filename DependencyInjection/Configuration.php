@@ -31,21 +31,9 @@ class Configuration implements ConfigurationInterface
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
         $rootNode
-	        ->children()
-		        ->arrayNode('supports')
-		        	->addDefaultsIfNotSet()
-		        	->children()
-		        		->booleanNode('asf_ui')->defaultTrue()->end()
-		        		->booleanNode('page')->defaultTrue()->end()
-		        		->booleanNode('post')->defaultTrue()->end()
-		        		->booleanNode('comment')->defaultTrue()->end()
-		        		->booleanNode('account')->defaultTrue()->end()
-		        		->booleanNode('asf_user')->defaultTrue()->end()
-		        		->booleanNode('genemu_form')->defaultTrue()->end()
-		        		->booleanNode('tinymce')->defaultTrue()->end()
-		        	->end()
-	        	->end()
-        	->end();
+            ->booleanNode('enable_asf_support')
+                ->defaultFalse()
+            ->end();
         
         return $treeBuilder;
     }
