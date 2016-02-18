@@ -17,16 +17,4 @@ use ASF\DocumentBundle\Model\Document\DocumentInterface;
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-interface PostInterface extends DocumentInterface
-{
-	/**
-	 * @return ASF\DocumentBundle\Model\Page\PageAuthorInterface
-	 */
-	public function getAuthor();
-	
-	/**
-	 * @param ASF\DocumentBundle\Model\Page\PageAuthorInterface $author
-	 * @return ASF\DocumentBundle\Model\Page\PageInterface
-	 */
-	public function setAuthor($author);
-}
+interface PostInterface extends DocumentInterface {}
