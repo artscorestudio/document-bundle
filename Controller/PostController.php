@@ -9,7 +9,7 @@
  */
 namespace ASF\DocumentBundle\Controller;
 
-use ASF\CoreBundle\Controller\ASFController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -35,7 +35,7 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-class PostController extends ASFController
+class PostController extends Controller
 {
 	/**
 	 * List all blog posts

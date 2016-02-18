@@ -9,7 +9,7 @@
  */
 namespace ASF\DocumentBundle\Controller;
 
-use ASF\CoreBundle\Controller\ASFController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -34,7 +34,7 @@ use Symfony\Component\Security\Acl\Permission\MaskBuilder;
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-class PageController extends ASFController
+class PageController extends Controller
 {
 	/**
 	 * List all website pages
