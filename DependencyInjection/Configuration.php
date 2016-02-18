@@ -25,14 +25,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('asf_doc');
+        $rootNode = $treeBuilder->root('asf_document');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
         $rootNode
-            ->booleanNode('enable_asf_support')
-                ->defaultFalse()
+            ->children()
+                ->booleanNode('enable_asf_support')
+                    ->defaultFalse()
+                ->end()
             ->end();
         
         return $treeBuilder;
