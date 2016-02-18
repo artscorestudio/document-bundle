@@ -4,14 +4,14 @@
 
 {% block stylesheets %}
 {{ parent() }}
-{% stylesheets '@AsfDocumentBundle/Resources/public/less/*' %}
+{% stylesheets '@ASFDocumentBundle/Resources/public/less/*' %}
 	<link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
 {% endstylesheets %}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-{% javascripts '@AsfDocumentBundle/Resources/public/js/*' %}
+{% javascripts '@ASFDocumentBundle/Resources/public/js/*' %}
 	<script src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% endblock %}
