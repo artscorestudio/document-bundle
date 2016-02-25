@@ -12,11 +12,11 @@ namespace ASF\DocumentBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
-use Symfony\Component\Form\FormView;
-use Symfony\Component\Form\FormInterface;
 
-use ASF\DocumentBundle\Entity\Manager\PageManager;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 
 /**
@@ -28,73 +28,22 @@ use ASF\DocumentBundle\Model\Document\DocumentModel;
 class PageFormType extends AbstractType
 {
 	/**
-	 * @var PageManager
-	 */
-	protected $pageManager;
-	
-	/**
-	 * @var SecurityContext
-	 */
-	protected $securityContext;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isAccountActivated;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isAsfUserSupport;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isGenemuFormSupport;
-	
-	/**
-	 * @param PageManager     $page_manager
-	 * @param SecurityContext $security_context
-	 * @param boolean         $is_account_activated
-	 * @param boolean         $is_asf_user_support
-	 * @param boolean         $is_genemu_form_activated
-	 */
-	public function __construct(PageManager $page_manager, SecurityContext $security_context, $is_account_activated, $is_asf_user_support, $is_genemu_form_activated)
-	{
-		$this->pageManager = $page_manager;
-		$this->securityContext = $security_context;
-		$this->isAccountActivated = $is_account_activated;
-		$this->isAsfUserSupport = $is_asf_user_support;
-		$this->isGenemuFormSupport = $is_genemu_form_activated;
-	}
-	
-	/*
-	 * (non-PHPdoc)
-	 * @see \Symfony\Component\Form\AbstractType::buildView()
-	 */
-	public function buildView(FormView $view, FormInterface $form, array $options) {
-		$view->vars['isAccountActivated'] = $this->isAccountActivated;
-		$view->vars['isAsfUserSupport'] = $this->isAsfUserSupport;
-	}
-	
-	/**
 	 * (non-PHPdoc)
 	 * @see \Symfony\Component\Form\AbstractType::buildForm()
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->add('title', 'text', array(
+		$builder->add('title', TextType::class, array(
 			'label' => 'Title',
 			'required' => true,
-			'max_length' => 255,
 			'attr' => array('class' => 'doc-title')
 		))
-		->add('slug', 'text', array(
+		->add('slug', TextType::class, array(
 			'label' => 'Slug',
 			'required' => true,
 			'attr' => array('class' => 'doc-slug')
 		))
-		->add('state', 'choice', array(
+		->add('state', ChoiceType::class, array(
 			'label' => 'State',
 			'required' => true,
 			'choices' => array(
@@ -105,19 +54,10 @@ class PageFormType extends AbstractType
 			'preferred_choices' => array(DocumentModel::STATE_DRAFT)
 		));
 		
-		$builder->add('content', 'textarea', array(
+		$builder->add('content', TextareaType::class, array(
 			'label' => 'Content',
 			'required' => false,
-			'attr' => array('class' => 'tinymce doc-content')
-		));
-			
-		if ( true === $this->isAccountActivated && true == $this->isAsfUserSupport ) {
-			$builder->add('author', 'asf_user_search_user');
-		}
-		
-		$builder->add('save', 'submit', array(
-			'label' => 'Save',
-			'translation_domain' => 'asf_doc'
+			'attr' => array('class' => 'tinymce-content doc-content')
 		));
 	}
 	
@@ -128,8 +68,6 @@ class PageFormType extends AbstractType
 	public function setDefaultOptions(OptionsResolverInterface $resolver)
 	{
 		$resolver->setDefaults(array(
-			'data_class' => $this->pageManager->getClassName(),
-			'submit_label' => 'add',
 			'translation_domain' => 'asf_doc_page'
 		));
 	}

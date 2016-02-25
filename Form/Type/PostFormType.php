@@ -12,12 +12,11 @@ namespace ASF\DocumentBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\Form\FormInterface;
 
-use ASF\DocumentBundle\Entity\Manager\PostManager;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
+use ASF\CoreBundle\Model\Manager\ASFEntityManagerInterface;
 
 /**
  * Post Form Type
@@ -28,44 +27,16 @@ use ASF\DocumentBundle\Model\Document\DocumentModel;
 class PostFormType extends AbstractType
 {
 	/**
-	 * @var PostManager
+	 * @var ASFEntityManagerInterface
 	 */
 	protected $postMaganer;
-
-	/**
-	 * @var SecurityContext
-	 */
-	protected $securityContext;
 	
 	/**
-	 * @var boolean
+	 * @param ASFEntityManagerInterface $post_manager
 	 */
-	protected $isAccountActivated;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isAsfUserSupport;
-	
-	/**
-	 * @var boolean
-	 */
-	protected $isGenemuFormSupport;
-	
-	/**
-	 * @param PostManager     $post_manager
-	 * @param SecurityContext $security_context
-	 * @param boolean         $is_account_activated
-	 * @param boolean         $is_asf_user_support
-	 * @param boolean         $is_genemu_form_activated
-	 */
-	public function __construct(PostManager $post_manager, SecurityContext $security_context, $is_account_activated, $is_asf_user_support, $is_genemu_form_activated)
+	public function __construct($post_manager)
 	{
 		$this->postManager = $post_manager;
-		$this->securityContext = $security_context;
-		$this->isAccountActivated = $is_account_activated;
-		$this->isAsfUserSupport = $is_asf_user_support;
-		$this->isGenemuFormSupport = $is_genemu_form_activated;
 	}
 	
 	/*
@@ -73,8 +44,8 @@ class PostFormType extends AbstractType
 	 * @see \Symfony\Component\Form\AbstractType::buildView()
 	 */
 	public function buildView(FormView $view, FormInterface $form, array $options) {
-		$view->vars['isAccountActivated'] = $this->isAccountActivated;
-		$view->vars['isAsfUserSupport'] = $this->isAsfUserSupport;
+		//$view->vars['isAccountActivated'] = $this->isAccountActivated;
+		//$view->vars['isAsfUserSupport'] = $this->isAsfUserSupport;
 	}
 	
 	/**
@@ -107,12 +78,12 @@ class PostFormType extends AbstractType
 		->add('content', 'textarea', array(
 			'label' => 'Content',
 			'required' => false,
-			'attr' => array('class' => 'tinymce doc-content')
+			'attr' => array('class' => 'tinymce-content doc-content')
 		));
 		
-		if ( true === $this->isAccountActivated && true == $this->isAsfUserSupport ) {
-			$builder->add('author', 'asf_user_search_user');
-		}
+		//if ( true === $this->isAccountActivated && true == $this->isAsfUserSupport ) {
+			//$builder->add('author', 'asf_user_search_user');
+		//}
 		
 		$builder->add('save', 'submit', array(
 			'label' => 'Save',
