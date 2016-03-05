@@ -9,7 +9,7 @@
  */
 namespace ASF\DocumentBundle\Controller;
 
-use ASF\CoreBundle\Controller\ASFController;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 /**
  * Backend Controller
@@ -17,7 +17,7 @@ use ASF\CoreBundle\Controller\ASFController;
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-class BackendController extends ASFController
+class BackendController extends Controller
 {
 	/**
 	 * Backend homepage for Document Bundle
