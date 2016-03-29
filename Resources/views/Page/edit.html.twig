@@ -4,52 +4,6 @@
 
 {% trans_default_domain 'asf_doc_page' %}
 
-{% block body %}
-	{% block breadcrumbs_tree %}
-	 > <a href="{{ path('asf_doc_page_list') }}" title="{{ 'Pages list'|trans }}">{{ 'Pages list'|trans }}</a>
-	{% if page.getId() is not null %}
-	 > <a href="{{ path('asf_doc_page_edit', {id: page.getId()}) }}" title="{{ page.getTitle() }}">{{ page.getTitle() }}</a>
-	{% else %}
-	 > <a href="{{ path('asf_doc_page_add') }}" title="{{ page.getTitle() }}">{{ page.getTitle() }}</a>
-	{% endif %}
-	{% endblock %}
-
-	{% block content %}
-	<div class="container-fluid">
-		<div class="row">
-		{{ form_start(form) }}
-		
-		{{ form_errors(form) }}
-		
-		<div class="row">
-			
-			<div class="col-xs-12">
-				<div class="form-group">
-					{{ form_widget(form.title) }}
-					{{ form_errors(form.title) }}
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-xs-2">
-				{{ form_row(form.state) }}
-			</div>
-			<div class="col-xs-7">
-				<div class="form-group">
-					<div class="row">{{ form_label(form.slug) }}</div>
-					<div class="row doc-url-container">
-						<div class="pull-left">{{ app.request.schemeAndHttpHost }} /</div>
-						<div class="pull-left doc-slug-container">{{ form_widget(form.slug) }}</div>
-					</div>
-					<div class="row">{{ form_errors(form.slug) }}</div>
-				</div>
-			</div>
-		</div>
-		
-		{{ form_end(form) }}
-		</div>
-	</div>
-
-	{% endblock %}
-	
-{% endblock body %}
+{% block asf_doc_content %}
+	{{ form(form) }}	
+{% endblock %}

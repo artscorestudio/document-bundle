@@ -2,22 +2,24 @@
 
 {% trans_default_domain 'asf_doc_post' %}
 
-{% block asf_base_meta_title %}{{ 'Posts list'|trans }}{% endblock %}
+{% block title %}{{ 'Posts list'|trans }}{% endblock %}
 
-{% block page_title %}{{ 'Posts list'|trans }}{% endblock %}
-
-{% block breadcrumbs_tree %}
- > <a href="{{ path('asf_doc_post_list') }}" title="{{ 'Posts list'|trans }}">{{ 'Posts list'|trans }}</a>
-{% endblock %}
-
-{% block asf_content_cmd %}
-<a class="btn btn-default" href="{{ path('asf_doc_post_add') }}" title="{{ 'Add new post'|trans }}">{{ 'Add new post'|trans }}</a>
-{% endblock asf_content_cmd %}
-
-{% block page_content %}
-<div class="row">
-	<div class="col-xs-12">
-		{{ grid(grid, '::datagrid-grid-template.html.twig') }}
+{% block asf_doc_content %}
+	{% block page_title %}{{ 'Posts list'|trans }}{% endblock %}
+	
+	{% block breadcrumbs_tree %}
+	 > <a href="{{ path('asf_doc_post_list') }}" title="{{ 'Posts list'|trans }}">{{ 'Posts list'|trans }}</a>
+	{% endblock %}
+	
+	{% block asf_content_cmd %}
+	<a class="btn btn-default" href="{{ path('asf_doc_post_add') }}" title="{{ 'Add new post'|trans }}">{{ 'Add new post'|trans }}</a>
+	{% endblock asf_content_cmd %}
+	
+	{% block page_content %}
+	<div class="row">
+		<div class="col-xs-12">
+			{{ grid(grid, '::datagrid-grid-template.html.twig') }}
+		</div>
 	</div>
-</div>
+	{% endblock %}
 {% endblock %}

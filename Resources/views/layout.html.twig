@@ -17,24 +17,5 @@
 {% endblock %}
 
 {% block body %}
-	{% block breadcrumbs %}
-	<div class="row">
-		{% block breadcrumbs_root %}
-		<a href="#" title="{{ 'Home'|trans }}">{{ 'Home'|trans }}</a> > <a href="{{ path('asf_doc_page_list') }}" title="{{ 'Pages list'|trans }}">{{ 'Pages list'|trans }}</a>
-		{% endblock %}
-		{% block breadcrumbs_tree %}{% endblock %}
-	</div> 
-	{% endblock %}
-	
-	<h1>{% block page_title %}{{ 'Pages list'|trans }}{% endblock %}</h1>
-	
-	{% block asf_cmd %}
-	<div class="row cmd-actions">
-		<div class="btn-group" role="group">
-		{% block asf_cmd_buttons %}{% endblock %}
-		</div>
-	</div>
-	{% endblock %}
-	
-	{% block content %}{% endblock %}
+	{% block asf_doc_content %}{% endblock %}
 {% endblock %}
