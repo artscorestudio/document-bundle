@@ -1,11 +1,11 @@
 <?php
-/**
- * This file is part of Artscore Studio Framework package
+/*
+ * This file is part of the Artscore Studio Framework package.
  *
- * (c) 2012-2015 Artscore Studio <info@artscore-studio.fr>
+ * (c) Nicolas Claverie <info@artscore-studio.fr>
  *
- * This source file is subject to the MIT Licence that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace ASF\DocumentBundle\Repository;
 
