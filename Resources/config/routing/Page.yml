@@ -1,21 +1,15 @@
-asf_doc_page_list:
+asf_document_page_list:
     path: /list
     defaults: { _controller: "ASFDocumentBundle:Page:list" }
 
-asf_doc_page_add:
+asf_document_page_add:
     path: /add
     defaults: { _controller: "ASFDocumentBundle:Page:edit" }
         
-asf_doc_page_edit:
+asf_document_page_edit:
     path: /edit/{id}
     defaults: { _controller: "ASFDocumentBundle:Page:edit" }
         
-asf_doc_page_delete:
+asf_document_page_delete:
     path: /delete/{id}
     defaults: { _controller: "ASFDocumentBundle:Page:delete" }
-    
-asf_doc_page_menu_node_list:
-    path: /menu/node/list
-    defaults: { _controller: "ASFDocumentBundle:Page:list" }
-    options:
-        expose: true

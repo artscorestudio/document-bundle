@@ -1,11 +1,11 @@
 <?php
-/**
- * This file is part of Artscore Studio Framework package
+/*
+ * This file is part of the Artscore Studio Framework package.
  *
- * (c) 2012-2015 Artscore Studio <info@artscore-studio.fr>
+ * (c) Nicolas Claverie <info@artscore-studio.fr>
  *
- * This source file is subject to the MIT Licence that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 namespace ASF\DocumentBundle\DependencyInjection;
 
@@ -32,11 +32,82 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
         $rootNode
             ->children()
-                ->booleanNode('enable_asf_support')
-                    ->defaultFalse()
-                ->end()
+	            ->scalarNode('form_theme')
+	            	->defaultValue('ASFDocumentBundle:Form:fields.html.twig')
+	            ->end()
+	            
+            	->append($this->addPageParameterNode())
+            	->append($this->addPostParameterNode())
             ->end();
         
         return $treeBuilder;
+    }
+    
+    /**
+     * Add Page Entity Configuration
+     */
+    protected function addPageParameterNode()
+    {
+    	$builder = new TreeBuilder();
+    	$node = $builder->root('page');
+    
+    	$node
+	    	->treatTrueLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")))
+	    	->treatFalseLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")))
+	    	->addDefaultsIfNotSet()
+	    	->children()
+		    	->arrayNode('form')
+			    	->addDefaultsIfNotSet()
+			    	->children()
+				    	->scalarNode('type')
+				    		->defaultValue('ASF\DocumentBundle\Form\Type\PageType')
+				    	->end()
+				    	->scalarNode('name')
+				    		->defaultValue('page_type')
+				    	->end()
+				    	->arrayNode('validation_groups')
+				    		->prototype('scalar')->end()
+				    		->defaultValue(array("Default"))
+				    	->end()
+			    	->end()
+		    	->end()
+	    	->end()
+    	;
+    
+    	return $node;
+    }
+    
+    /**
+     * Add Post Entity Configuration
+     */
+    protected function addPostParameterNode()
+    {
+    	$builder = new TreeBuilder();
+    	$node = $builder->root('post');
+    
+    	$node
+	    	->treatTrueLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")))
+	    	->treatFalseLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")))
+	    	->addDefaultsIfNotSet()
+	    	->children()
+		    	->arrayNode('form')
+			    	->addDefaultsIfNotSet()
+			    	->children()
+				    	->scalarNode('type')
+				    		->defaultValue('ASF\DocumentBundle\Form\Type\PostType')
+				    	->end()
+				    	->scalarNode('name')
+				    		->defaultValue('post_type')
+				    	->end()
+				    	->arrayNode('validation_groups')
+				    		->prototype('scalar')->end()
+				    		->defaultValue(array("Default"))
+				    	->end()
+			    	->end()
+		    	->end()
+	    	->end()
+    	;
+    
+    	return $node;
     }
 }

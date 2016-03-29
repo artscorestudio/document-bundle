@@ -1,0 +1,11 @@
+asf_document_homepage:
+    path: /admin/doc
+    defaults: { _controller: "ASFDocumentBundle:Default:index" }
+    
+asf_document_page:
+    resource: "@ASFDocumentBundle/Resources/config/routing/Page.yml"
+    prefix:   /admin/doc/page
+    
+asf_document_post:
+    resource: "@ASFDocumentBundle/Resources/config/routing/Post.yml"
+    prefix:   /admin/doc/post

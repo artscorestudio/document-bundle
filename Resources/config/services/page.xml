@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+
+		<!-- Page Manager -->
+		<parameter key="asf_document.page.entity.class">ASF\DocumentBundle\Entity\Page</parameter>
+		
+		<!-- Form -->
+		<parameter key="asf_document.form.type.page.class">ASF\DocumentBundle\Form\Type\PageType</parameter>
+
+	</parameters>
+
+    <services>
+        
+        <!-- Page Entity Manager -->
+        <service id="asf_document.page.manager" class="%asf_document.entity.manager.class%">
+            <tag name="asf_core.manager" entity="%asf_document.page.entity.class%" />
+        </service>
+        
+        <!-- Form -->
+        <service id="asf_document.form.factory.page" class="%asf_document.form.factory.class%">
+            <argument type="service" id="form.factory" />
+            <argument>%asf_document.page.form.name%</argument>
+            <argument>%asf_document.page.form.type%</argument>
+        </service>
+        
+        <service id="asf_document.form.type.page" class="%asf_document.form.type.page.class%">
+        	<argument type="service" id="asf_document.page.manager" />
+			<tag name="form.type" alias="page_type" />
+		</service>
+        
+    </services>
+    
+</container>

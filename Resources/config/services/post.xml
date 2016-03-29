@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+
+		<!-- Post Manager -->
+		<parameter key="asf_document.post.entity.class">ASF\DocumentBundle\Entity\Post</parameter>
+		
+		<!-- Form -->
+		<parameter key="asf_document.form.type.post.class">ASF\DocumentBundle\Form\Type\PostType</parameter>
+
+	</parameters>
+
+    <services>
+        
+        <!-- Post Entity Manager -->
+        <service id="asf_document.post.manager" class="%asf_document.entity.manager.class%">
+            <tag name="asf_core.manager" entity="%asf_document.post.entity.class%" />
+        </service>
+        
+        <!-- Form -->
+        <service id="asf_document.form.factory.post" class="%asf_document.form.factory.class%">
+            <argument type="service" id="form.factory" />
+            <argument>%asf_document.post.form.name%</argument>
+            <argument>%asf_document.post.form.type%</argument>
+        </service>
+        
+        <service id="asf_document.form.type.post" class="%asf_document.form.type.post.class%">
+        	<argument type="service" id="asf_document.post.manager" />
+			<tag name="form.type" alias="post_type" />
+		</service>
+        
+    </services>
+    
+</container>

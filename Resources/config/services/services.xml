@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+	<parameters>
+		
+		<!-- Generic Entity Manager -->
+    	<parameter key="asf_document.entity.manager.class">ASF\DocumentBundle\Entity\Manager\ASFDocumentEntityManager</parameter>
+		
+		<!-- Form Factory -->
+		<parameter key="asf_document.form.factory.class">ASF\DocumentBundle\Form\Factory\FormFactory</parameter>
+		
+	</parameters>
+
+</container>
