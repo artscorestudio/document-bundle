@@ -1,0 +1,2 @@
+asf_document:
+    resource: "@ASFDocumentBundle/Resources/config/routing/routing.yml"

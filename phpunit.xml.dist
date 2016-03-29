@@ -11,10 +11,6 @@
          syntaxCheck="false"
          bootstrap="./Tests/bootstrap.php"
 >
-	<php>
-		<server name="KERNEL_DIR" value="./Tests/" />
-	</php>
-	
     <testsuites>
         <testsuite name="Asf Document Test Suite">
             <directory>./Tests/</directory>
@@ -31,4 +27,8 @@
             </exclude>
         </whitelist>
     </filter>
+    
+    <logging>
+    	<log type="coverage-text" target="php://stdout" showUncoveredFiles="true" />
+    </logging>
 </phpunit>
