@@ -1,7 +1,7 @@
 {
 	"name" : "artscorestudio/document-bundle",
 	"type" : "library",
-	"description" : "Document Bundle is a Symfony 2+ bundle for create and manage documents in your Symfony2 project. This package is a part of Artscore Studio Framework.",
+	"description" : "Document Bundle is a Symfony 2/3 bundle for create and manage documents in your Symfony 2/3 application. This package is a part of Artscore Studio Framework.",
 	"keywords" : [
 		"Symfony"
 	],
@@ -21,8 +21,7 @@
         "sensio/framework-extra-bundle": "~3.0"
 	},
 	"require-dev" : {
-		"phpunit/phpunit": "5.1.*",
-        "mockery/mockery": "0.9.*"
+	    
 	},
 	"autoload" : {
 		"psr-4" : {
