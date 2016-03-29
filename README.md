@@ -1,6 +1,6 @@
-Artscore Studio Document Bundle
-===============================
-Document Bundle is a Symfony 2+ bundle for create and manage documents in your Symfony 2 application. This package is a part of Artscore Studio Framework.
+# Artscore Studio Document Bundle
+
+Document Bundle is a Symfony 2/3 bundle for create and manage documents in your Symfony 2/3 application. This package is a part of Artscore Studio Framework.
 
 > IMPORTANT NOTICE: This bundle is still under development. Any changes will be done without prior notice to consumers of this package. Of course this code will become stable at a certain point, but for now, use at your own risk.
 
