@@ -28,6 +28,10 @@ use ASF\DocumentBundle\Model\Document\DocumentModel;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Permission\MaskBuilder;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
+use ASF\DocumentBundle\Model\Document\VersionableInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\Query\Expr;
+use APY\DataGridBundle\Grid\Column\Column;
 
 /**
  * Artscore Studio Post Controller
@@ -44,17 +48,22 @@ class PostController extends Controller
 	 */
 	public function listAction()
 	{
+		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
+		
+		$postManager = $this->get('asf_document.post.manager');
+		
 		// Define DataGrid Source
-		$source = new Entity($this->get('asf_doc.post.manager')->getClassName());
-			 
+		$source = new Entity($postManager->getClassName());
+		
 		// Get datagrid
 		$grid = $this->get('grid');
 		$grid instanceof Grid;
 		$grid->setSource($source);
 		$tableAlias = $source->getTableAlias();
-		$postClassName = $this->get('asf_doc.post.manager')->getShortClassName();
+		$postClassName = $postManager->getShortClassName();
+		$authorClassName = $this->getParameter('asf_document.post.signable') !== false ? $this->getParameter('asf_document.post.signable') : false;
 		
-		$source->manipulateQuery(function($query) use ($tableAlias, $postClassName) {
+		$source->manipulateQuery(function($query) use ($tableAlias, $postClassName, $authorClassName) {
 			$query instanceof QueryBuilder;
 			
 			// Get all original version of each posts
@@ -86,6 +95,11 @@ class PostController extends Controller
 				$query->add('where', $query->expr()->in($tableAlias.'.id', $ids));
 			}
 			
+			if ( $authorClassName !== false ) {
+				$query->addSelect('a.name AS author_name');
+				$query->leftJoin($tableAlias.'.author', 'a', Expr\Join::WITH, $tableAlias.'.author=a.id');
+			}
+			
 			if ( count($query->getDQLPart('orderBy')) == 0) {
 				$query->orderBy($tableAlias.'.createdAt', 'DESC');
 			}
@@ -93,29 +107,33 @@ class PostController extends Controller
 		
 		// Grid Columns configuration
 		$grid->getColumn('id')->setVisible(false);
-		$grid->getColumn('title')->setTitle($this->getTranslator()->trans('Title', array(), 'asf_doc'));
+		$grid->getColumn('title')->setTitle($this->get('translator')->trans('Post title', array(), 'asf_document'));
 		$grid->getColumn('content')->setVisible(false);
-		$grid->getColumn('slug')->setTitle($this->getTranslator()->trans('Slug', array(), 'asf_doc_post'));
-		$grid->getColumn('state')->setTitle($this->getTranslator()->trans('State', array(), 'asf_doc'))
+		$grid->getColumn('slug')->setTitle($this->get('translator')->trans('Slug', array(), 'asf_document'));
+		$grid->getColumn('state')->setTitle($this->get('translator')->trans('State', array(), 'asf_document'))
 			->setFilterType('select')->setSelectFrom('values')->setOperatorsVisible(false)
 			->setDefaultOperator('eq')->setValues(array(
-				DocumentModel::STATE_DRAFT => $this->getTranslator()->trans('Draft', array(), 'asf_doc'),
-				DocumentModel::STATE_WAITING => $this->getTranslator()->trans('Waiting', array(), 'asf_doc'),
-				DocumentModel::STATE_PUBLISHED => $this->getTranslator()->trans('Published', array(), 'asf_doc')
+				DocumentModel::STATE_DRAFT => $this->get('translator')->trans('Draft', array(), 'asf_document'),
+				DocumentModel::STATE_WAITING => $this->get('translator')->trans('Waiting', array(), 'asf_document'),
+				DocumentModel::STATE_PUBLISHED => $this->get('translator')->trans('Published', array(), 'asf_document')
 			));
-		$grid->getColumn('createdAt')->setTitle($this->getTranslator()->trans('Created at', array(), 'asf_doc'));
-		$grid->getColumn('updatedAt')->setTitle($this->getTranslator()->trans('Updated at', array(), 'asf_doc'));
+		$grid->getColumn('createdAt')->setTitle($this->get('translator')->trans('Created at', array(), 'asf_document'));
+		$grid->getColumn('updatedAt')->setTitle($this->get('translator')->trans('Updated at', array(), 'asf_document'));
 		
-		$edit_action = new RowAction('btn_edit', 'asf_doc_post_edit');
+		$edit_action = new RowAction('btn_edit', 'asf_document_post_edit');
 		$edit_action->setRouteParameters(array('id'));
 		$grid->addRowAction($edit_action);
 		
-		$delete_action = new RowAction('btn_delete', 'asf_doc_post_delete', true);
+		$delete_action = new RowAction('btn_delete', 'asf_document_post_delete', true);
 		$delete_action->setRouteParameters(array('id'))
-			->setConfirmMessage($this->getTranslator()->trans('Do you want to delete this %name% ?', array('%name%' => $this->getTranslator()->trans('this post', array(), 'asf_doc_post')), 'asf_doc'));
+			->setConfirmMessage($this->get('translator')->trans('Do you want to delete this post?', array(), 'asf_document'));
 		$grid->addRowAction($delete_action);
 		
-		$grid->setNoDataMessage($this->getTranslator()->trans('No posts was found.', array(), 'asf_doc_post'));
+		if ( $this->getParameter('asf_document.post.signable') !== false ) {
+			$grid->getColumn('author_name')->setTitle($this->get('translator')->trans('Post author', array(), 'asf_document'));
+		}
+		
+		$grid->setNoDataMessage($this->get('translator')->trans('No post was found.', array(), 'asf_document'));
 		
 		return $grid->getGridResponse('ASFDocumentBundle:Post:list.html.twig', array('grid' => $grid));
 	}
@@ -128,69 +146,64 @@ class PostController extends Controller
 	 * @throws \Exception            Error on post's author not found or post not found  
 	 * @return \Symfony\Component\HttpFoundation\Response
 	 */
-	public function editAction($id = null)
+	public function editAction(Request $request, $id = null)
 	{
-		$securityContext = $this->get('security.context');
+		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
+		$postManager = $this->get('asf_document.post.manager');
 		
 		if ( !is_null($id) ) {
-			$original = $this->get('asf_doc.post.manager')->getRepository()->findOneBy(array('id' => $id));
+			$original = $postManager->getRepository()->findOneBy(array('id' => $id));
 			
-			$post = clone $original;
-			$this->get('asf_doc.post.manager')->getEntityManager()->detach($post);
-			if ( is_null($original->getOriginal()) )
-				$post->setOriginal($original);
-			else
-				$post->setOriginal($original->getOriginal());
-			
-			if (false === $securityContext->isGranted('EDIT', $post))
-				throw new AccessDeniedException();
-			$success_message = $this->getTranslator()->trans('Updated successfully', array(), 'asf_doc_post');
-			
-		} else {
-			$post = $this->get('asf_doc.post.manager')->createInstance();
-			
-			if ( true === $this->container->getParameter('asf_doc.supports.account') && true === $this->container->getParameter('asf_doc.supports.asf_user') ) {
-				$author = $this->get('security.context')->getToken()->getUser();
-				$post->setAuthor($author);
+			if ( $original instanceof VersionableInterface ) {
+				$post = clone $original;
+				$postManager->getEntityManager()->detach($post);
+				if ( is_null($original->getOriginal()) )
+					$post->setOriginal($original);
+				else
+					$post->setOriginal($original->getOriginal());
+			} else {
+				$post = $original;
 			}
 			
-			$post->setTitle($this->getTranslator()->trans('New post', array(), 'asf_doc_post'))->setSlug($this->getTranslator()->trans('new-post', array(), 'asf_doc_post'));
-			$success_message = $this->get('translator')->trans('Created successfully', array(), 'asf_doc_post');
+			$success_message = $this->get('translator')->trans('Updated successfully', array(), 'asf_document');
+			
+		} else {
+			$post = $postManager->createInstance();
+			$post->setTitle($this->get('translator')->trans('New post', array(), 'asf_document'))->setSlug($this->get('translator')->trans('new-post', array(), 'asf_document'));
+			$success_message = $this->get('translator')->trans('Created successfully', array(), 'asf_document');
 		}
 		
 		if ( is_null($post) )
-			throw new \Exception($this->getTranslator()->trans('An error occurs when generating or getting the post', array(), 'asf_doc_post'));
+			throw new \Exception($this->get('translator')->trans('An error occurs when generating or getting the post', array(), 'asf_document'));
 
-		$form = $this->get('asf_doc.form.post')->setData($post);
-		$formHandler = $this->get('asf_doc.form.post.handler');
+		$formFactory = $this->get('asf_document.form.factory.post');
+		$form = $formFactory->createForm();
+		$form->setData($post);
 		
-		if ( true === $formHandler->process() ) {
+		$form->handleRequest($request);
+		
+		if ( $form->isSubmitted() && $form->isValid() ) {
 			try {
-				$update_acl = false;
-					
 				if ( is_null($post->getId()) ) {
-					$this->get('asf_doc.post.manager')->getEntityManager()->persist($post);
-					$update_acl = true;
+					$postManager->getEntityManager()->persist($post);
 				}
-				$this->get('asf_doc.post.manager')->getEntityManager()->flush();
-					
-				if ( true === $update_acl ) {
-					$object_identity = ObjectIdentity::fromDomainObject($post);
-					$acl = $this->get('security.acl.provider')->createAcl($object_identity);
+				$postManager->getEntityManager()->flush();
 				
-					$security_identity = UserSecurityIdentity::fromAccount($post->getAuthor());
-				
-					$acl->insertObjectAce($security_identity, MaskBuilder::MASK_OWNER);
-					$this->get('security.acl.provider')->updateAcl($acl);
+				if ( $this->has('asf_layout.flash_message') ) {
+					$this->get('asf_layout.flash_message')->success($success_message);
 				}
-				$this->get('asf_layout.flash_message')->success($success_message);
-				return $this->redirect($this->get('router')->generate('asf_doc_post_edit', array('id' => $post->getId())));
+				
+				return $this->redirect($this->get('router')->generate('asf_document_post_edit', array('id' => $post->getId())));
+				
 			} catch (\Exception $e) {
-				$this->get('asf_layout.flash_message')->danger($e->getMeesage());
+				if ( $this->has('asf_layout.flash_message') ) {
+					$this->get('asf_layout.flash_message')->danger($e->getMeesage());
+				}
 			}
 		}
 		
-		return $this->render('ASFDocumentBundle:Post:edit.html.twig', array('post' => $post, 
+		return $this->render('ASFDocumentBundle:Post:edit.html.twig', array(
+			'post' => $post, 
 			'form' => $form->createView()
 		));
 	}
@@ -205,21 +218,28 @@ class PostController extends Controller
 	 */
 	public function deleteAction($id)
 	{
-		$securityContext = $this->get('security.context');
-		$post = $this->get('asf_doc.post.manager')->getRepository()->findOneBy(array('id' => $id));
-		if (false === $securityContext->isGranted('DELETE', $post))
-			throw new AccessDeniedException();
+		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
+		$postManager = $this->get('asf_document.post.manager');
 		
+		$post = $postManager->getRepository()->findOneBy(array('id' => $id));
+
 		try {
-			$this->get('asf_doc.post.manager')->getEntityManager()->remove($post);
-			$this->get('asf_doc.post.manager')->getEntityManager()->flush();
+			if ( is_null($post) )
+				throw new \Exception($this->get('translator')->trans('An error occurs when deleting the post', array(), 'asf_document'));
 			
-			$this->get('asf_layout.flash_message')->success($this->getTranslator()->trans('The post "%name%" successfully deleted', array('%name%' => $post->getTitle()), 'asf_doc_post'));
+			$postManager->getEntityManager()->remove($post);
+			$postManager->getEntityManager()->flush();
+			
+			if ( $this->has('asf_layout.flash_message') ) {
+				$this->get('asf_layout.flash_message')->success($this->get('translator')->trans('The post "%name%" successfully deleted', array('%name%' => $post->getTitle()), 'asf_document'));
+			}
 			
 		} catch (\Exception $e) {
-			$this->get('asf_layout.flash_message')->danger($e->getMessage());
+			if ( $this->has('asf_layout.flash_message') ) {
+				$this->get('asf_layout.flash_message')->danger($e->getMessage());
+			}
 		}
 		
-		return $this->redirect($this->get('router')->generate('asf_doc_post_list'));
+		return $this->redirect($this->get('router')->generate('asf_document_post_list'));
 	}
 }

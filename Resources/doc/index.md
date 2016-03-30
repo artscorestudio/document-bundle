@@ -52,12 +52,28 @@ public function registerBundles()
 }
 ```
 
-### Step 3 : Import ASFDocumentBundle routes
+### Step 3 : Configure the bundle
+
+If you want to use all the features provided by the bundle, you can configure it like the following :
+
+```yaml
+# app/config/config.yml
+asf_document:
+    page:
+        versionable: true    # Default : false. This is for enable versioning for Page entities
+        signable: true       # Default : false. This is for link a Page to an author
+    post:
+        versionable: true    # Default : false. This is for enable versioning for Post entities
+        signable: true       # Default : false. This is for link a Post to an author
+```
+For more information about the versioning system and author attribute in bundle's entities, check [Bundle's Entities](entities.md).
+
+### Step 4 : Import ASFDocumentBundle routes
 
 ```yaml
 # app/config/routing.yml
 asf_document:
-    resource: "@ASFDocumentBundle/Resources/config/routing.yml"
+    resource: "@ASFDocumentBundle/Resources/config/routing/routing.yml"
 ```
 
 ### Step 5 : Extends the bundle

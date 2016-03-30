@@ -24,6 +24,7 @@
 		
 		<discriminator-column name="discr" type="string" />
 		<discriminator-map>
+			<discriminator-mapping value="Document" class="Document" />
 			<discriminator-mapping value="Page" class="Page" />
 			<discriminator-mapping value="Post" class="Post" />
 		</discriminator-map>

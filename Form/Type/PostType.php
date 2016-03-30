@@ -15,6 +15,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 use ASF\DocumentBundle\Entity\Manager\ASFDocumentEntityManagerInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 
 /**
@@ -44,18 +47,17 @@ class PostType extends AbstractType
 	 */
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
-		$builder->add('title', 'text', array(
-			'label' => 'Title',
+		$builder->add('title', TextType::class, array(
+			'label' => 'Post title',
 			'required' => true,
-			'max_length' => 255,
 			'attr' => array('class' => 'doc-title')
 		))
-		->add('slug', 'text', array(
+		->add('slug', TextType::class, array(
 			'label' => 'Slug',
 			'required' => true,
 			'attr' => array('class' => 'doc-slug')
 		))
-		->add('state', 'choice', array(
+		->add('state', ChoiceType::class, array(
 			'label' => 'State',
 			'required' => true,
 			'choices' => array(
@@ -65,7 +67,7 @@ class PostType extends AbstractType
 			),
 			'preferred_choices' => array(DocumentModel::STATE_DRAFT)
 		))
-		->add('content', 'textarea', array(
+		->add('content', TextareaType::class, array(
 			'label' => 'Content',
 			'required' => false,
 			'attr' => array('class' => 'tinymce-content doc-content')
@@ -80,7 +82,7 @@ class PostType extends AbstractType
 	{
 		$resolver->setDefaults(array(
 			'data_class' => $this->postManager->getClassName(),
-			'translation_domain' => 'asf_doc_post'
+			'translation_domain' => 'asf_document'
 		));
 	}
 	

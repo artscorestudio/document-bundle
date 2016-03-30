@@ -1,0 +1,16 @@
+/* Page or Post forms */
+.doc-title {
+  font-size: 36px;
+  border-top-width: 0;
+  border-right-width: 0;
+  border-left-width: 0;
+  padding: 0;
+  line-height: 2.857142858;
+  height: 40px;
+  border-radius: 0;
+  box-shadow: none 
+}
+
+.doc-content {
+  min-height: 400px
+}

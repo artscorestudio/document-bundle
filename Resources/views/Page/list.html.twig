@@ -1,27 +1,16 @@
 {% extends 'ASFDocumentBundle::layout.html.twig' %}
 
-{% trans_default_domain 'asf_doc_page' %}
+{% trans_default_domain 'asf_document' %}
 
 {% block title %}{{ 'Pages list'|trans }}{% endblock %}
 
 {% block asf_doc_content %}
-	{% block page_title %}{{ 'Pages list'|trans }}{% endblock %}
+	<h1>{{ 'Pages list'|trans }}</h1>
 
-	{% block breadcrumbs_tree %}
-	{{ parent() }}
-	 > <a href="{{ path('asf_doc_page_list') }}" title="{{ 'Pages list'|trans }}">{{ 'Pages list'|trans }}</a>
-	{% endblock %}
-	
-	{% block asf_cmd_buttons %}
-	<a class="btn btn-default" href="{{ path('asf_doc_page_add') }}" title="{{ 'Add new page'|trans }}">{{ 'Add new page'|trans }}</a>
-	{% endblock %}
-	
-	{% block content %}
 	<div class="row">
 		<div class="col-xs-12">
-			{{ grid(grid, '::datagrid-grid-template.html.twig') }}
+			{{ grid(grid) }}
 		</div>
 	</div>
-	{% endblock %}
-	
-{% endblock body %}
+
+{% endblock %}

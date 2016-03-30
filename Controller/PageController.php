@@ -22,6 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 use ASF\DocumentBundle\Event\DocumentEvents;
 use ASF\DocumentBundle\Form\Type\PageFormType;
+use ASF\DocumentBundle\Model\Document\VersionableInterface;
 
 /**
  * Artscore Studio Page Controller
@@ -40,17 +41,20 @@ class PageController extends Controller
 	{
 		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
 		
+		$pageManager = $this->get('asf_document.page.manager');
+		
 		// Define DataGrid Source
-		$source = new Entity($this->get('asf_doc.page.manager')->getClassName());
+		$source = new Entity($pageManager->getClassName());
 
 		// Get datagrid
 		$grid = $this->get('grid');
 		$grid instanceof Grid;
 		$grid->setSource($source);
 		$tableAlias = $source->getTableAlias(); 
-		$pageClassName = $this->get('asf_doc.page.manager')->getShortClassName();
+		$pageClassName = $pageManager->getShortClassName();
+		$authorClassName = $this->getParameter('asf_document.page.signable') !== false ? $this->getParameter('asf_document.page.signable') : false;
 		
-		$source->manipulateQuery(function($query) use ($tableAlias, $pageClassName) {
+		$source->manipulateQuery(function($query) use ($tableAlias, $pageClassName, $authorClassName) {
 			$query instanceof QueryBuilder;
 			
 			// Get all original version of each pages
@@ -88,29 +92,33 @@ class PageController extends Controller
 		
 		// Grid Columns configuration
 		$grid->getColumn('id')->setVisible(false);
-		$grid->getColumn('title')->setTitle($this->get('translator')->trans('Title', array(), 'asf_doc'));
+		$grid->getColumn('title')->setTitle($this->get('translator')->trans('Page title', array(), 'asf_document'));
 		$grid->getColumn('content')->setVisible(false);
-		$grid->getColumn('slug')->setTitle($this->get('translator')->trans('Slug', array(), 'asf_doc_page'));
-		$grid->getColumn('state')->setTitle($this->get('translator')->trans('State', array(), 'asf_doc'))
+		$grid->getColumn('slug')->setTitle($this->get('translator')->trans('Slug', array(), 'asf_document'));
+		$grid->getColumn('state')->setTitle($this->get('translator')->trans('State', array(), 'asf_document'))
 			->setFilterType('select')->setSelectFrom('values')->setOperatorsVisible(false)
 			->setDefaultOperator('eq')->setValues(array(
-				DocumentModel::STATE_DRAFT => $this->get('translator')->trans('Draft', array(), 'asf_doc'),
-				DocumentModel::STATE_WAITING => $this->get('translator')->trans('Waiting', array(), 'asf_doc'),
-				DocumentModel::STATE_PUBLISHED => $this->get('translator')->trans('Published', array(), 'asf_doc')
+				DocumentModel::STATE_DRAFT => $this->get('translator')->trans('Draft', array(), 'asf_document'),
+				DocumentModel::STATE_WAITING => $this->get('translator')->trans('Waiting', array(), 'asf_document'),
+				DocumentModel::STATE_PUBLISHED => $this->get('translator')->trans('Published', array(), 'asf_document')
 			));
-		$grid->getColumn('createdAt')->setTitle($this->get('translator')->trans('Created at', array(), 'asf_doc'));
-		$grid->getColumn('updatedAt')->setTitle($this->get('translator')->trans('Updated at', array(), 'asf_doc'));
+		$grid->getColumn('createdAt')->setTitle($this->get('translator')->trans('Created at', array(), 'asf_document'));
+		$grid->getColumn('updatedAt')->setTitle($this->get('translator')->trans('Updated at', array(), 'asf_document'));
 		
-		$edit_action = new RowAction('btn_edit', 'asf_doc_page_edit');
+		$edit_action = new RowAction('btn_edit', 'asf_document_page_edit');
 		$edit_action->setRouteParameters(array('id'));
 		$grid->addRowAction($edit_action);
 		
-		$delete_action = new RowAction('btn_delete', 'asf_doc_page_delete', true);
+		$delete_action = new RowAction('btn_delete', 'asf_document_page_delete', true);
 		$delete_action->setRouteParameters(array('id'))
-			->setConfirmMessage($this->get('translator')->trans('Do you want to delete this %name% ?', array('%name%' => $this->get('translator')->trans('this page', array(), 'asf_doc_page')), 'asf_doc'));
+			->setConfirmMessage($this->get('translator')->trans('Do you want to delete this Page?', array(), 'asf_document'));
 		$grid->addRowAction($delete_action);
 		
-		$grid->setNoDataMessage($this->get('translator')->trans('No page was found.', array(), 'asf_doc_page'));
+		if ( $this->getParameter('asf_document.page.signable') !== false ) {
+			$grid->getColumn('author')->setTitle($this->get('translator')->trans('Page author', array(), 'asf_document'));
+		}
+		
+		$grid->setNoDataMessage($this->get('translator')->trans('No page was found.', array(), 'asf_document'));
 		
 		return $grid->getGridResponse('ASFDocumentBundle:Page:list.html.twig', array('grid' => $grid));
 	}
@@ -126,49 +134,61 @@ class PageController extends Controller
 	public function editAction(Request $request, $id = null)
 	{
 		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
+		$pageManager = $this->get('asf_document.page.manager');
 		
 		if ( !is_null($id) ) {
-			$original = $this->get('asf_doc.page.manager')->getRepository()->findOneBy(array('id' => $id));
+			$original = $pageManager->getRepository()->findOneBy(array('id' => $id));
 			
-			$page = clone $original;
-			$this->get('asf_doc.page.manager')->getEntityManager()->detach($page);
-			if ( is_null($original->getOriginal()) )
-				$page->setOriginal($original);
-			else
-				$page->setOriginal($original->getOriginal());
+			if ( $original instanceof VersionableInterface ) {
+				$page = clone $original;
+				$pageManager->getEntityManager()->detach($page);
+				
+				if ( is_null($original->getOriginal()) )
+					$page->setOriginal($original);
+				else
+					$page->setOriginal($original->getOriginal());
+			} else {
+				$page = $original;
+			}
 			
-			if (false === $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN'))
-				throw new AccessDeniedException();
-			
-			$success_message = $this->get('translator')->trans('Updated successfully', array(), 'asf_doc_page');
+			$success_message = $this->get('translator')->trans('Updated successfully', array(), 'asf_document');
 		} else {
-			$page = $this->get('asf_doc.page.manager')->createInstance();
-			$page->setTitle($this->get('translator')->trans('New page', array(), 'asf_doc_page'))->setSlug($this->get('translator')->trans('new-page', array(), 'asf_doc_page'));
-			$success_message = $this->get('translator')->trans('Created successfully', array(), 'asf_doc_page');
+			$page = $pageManager->createInstance();
+			$page->setTitle($this->get('translator')->trans('New page', array(), 'asf_document'))->setSlug($this->get('translator')->trans('new-page', array(), 'asf_document'));
+			$success_message = $this->get('translator')->trans('Created successfully', array(), 'asf_document');
 		}
 		
 		if ( is_null($page) )
-			throw new \Exception($this->get('translator')->trans('An error occurs when generating or getting the page', array(), 'asf_doc_page'));
+			throw new \Exception($this->get('translator')->trans('An error occurs when generating or getting the page', array(), 'asf_document'));
 
-		$form = $this->createForm(PageFormType::class, $page, array('data_class' => $this->get('asf_doc.page.manager')->getClassName()));
+		$formFactory = $this->get('asf_document.form.factory.page');
+		$form = $formFactory->createForm();
+		$form->setData($page);
+		
 		$form->handleRequest($request);
 		
 		if ( $form->isSubmitted() && $form->isValid() ) {
 			try {
-				print_r( $page );
-				throw new \Exception('NICOLAS');
-				$this->get('asf_doc.page.manager')->getEntityManager()->persist($page);
-				$this->get('asf_doc.page.manager')->getEntityManager()->flush();
-				$this->get('asf_layout.flash_message')->success($success_message);
-				return $this->redirect($this->get('router')->generate('asf_doc_page_edit', array('id' => $page->getId())));
+				if ( is_null($page->getId()) ) {
+					$pageManager->getEntityManager()->persist($page);
+				}
+				$pageManager->getEntityManager()->flush();
+				
+				if ( $this->has('asf_layout.flash_message') ) {
+					$this->get('asf_layout.flash_message')->success($success_message);
+				}
+				
+				return $this->redirect($this->get('router')->generate('asf_document_page_edit', array('id' => $page->getId())));
 				
 			} catch(\Exception $e) {
-				$this->get('asf_layout.flash_message')->danger($e->getMessage());
+				if ( $this->has('asf_layout.flash_message') ) {
+					$this->get('asf_layout.flash_message')->danger($e->getMessage());
+				}
 			}
 		}
 		
 		return $this->render('ASFDocumentBundle:Page:edit.html.twig', array(
-			'page' => $page, 
+			'page' => $page,
 			'form' => $form->createView()
 		));
 	}
@@ -183,21 +203,26 @@ class PageController extends Controller
 	 */
 	public function deleteAction($id)
 	{
-		$securityContext = $this->get('security.context');
-		$page = $this->get('asf_doc.page.manager')->getRepository()->findOneBy(array('id' => $id));
-		if (false === $securityContext->isGranted('DELETE', $page))
-			throw new AccessDeniedException();
+		$this->denyAccessUnlessGranted('ROLE_ADMIN', null, 'Unable to access this page !');
+		$pageManager = $this->get('asf_document.page.manager');
+		
+		$page = $pageManager->getRepository()->findOneBy(array('id' => $id));
 		
 		try {
-			$this->get('asf_doc.page.manager')->getEntityManager()->remove($page);
-			$this->get('asf_doc.page.manager')->getEntityManager()->flush();
+			if ( is_null($page) )
+				throw new \Exception($this->get('translator')->trans('An error occurs when deleting the page', array(), 'asf_document'));
 			
-			$this->get('asf_layout.flash_message')->success($this->getTranslator()->trans('The page "%name%" successfully deleted', array('%name%' => $page->getTitle()), 'asf_doc_page'));
+			$pageManager->getEntityManager()->remove($page);
+			$pageManager->getEntityManager()->flush();
+			
+			if ( $this->has('asf_layout.flash_message') ) {
+				$this->get('asf_layout.flash_message')->success($this->getTranslator()->trans('The page "%name%" successfully deleted', array('%name%' => $page->getTitle()), 'asf_document'));
+			}
 			
 		} catch (\Exception $e) {
 			$this->get('asf_layout.flash_message')->danger($e->getMessage());
 		}
 		
-		return $this->redirect($this->get('router')->generate('asf_doc_page_list'));
+		return $this->redirect($this->get('router')->generate('asf_document_page_list'));
 	}
 }

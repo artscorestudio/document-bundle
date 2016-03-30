@@ -48,7 +48,7 @@ class PageType extends AbstractType
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder->add('title', TextType::class, array(
-			'label' => 'Title',
+			'label' => 'Page title',
 			'required' => true,
 			'attr' => array('class' => 'doc-title')
 		))
@@ -83,7 +83,7 @@ class PageType extends AbstractType
 	{
 		$resolver->setDefaults(array(
 			'data_class' => $this->pageManager->getClassName(),
-			'translation_domain' => 'asf_doc_page'
+			'translation_domain' => 'asf_document'
 		));
 	}
 	

@@ -1,0 +1,39 @@
+# Commons
+Document Manager: Gestionnaire de documents
+Slug: Slug
+State: Etat
+Draft: Brouillon
+Waiting: En attente
+Published: Publié(e)
+Created at: Créé(e) le
+Updated at: Mis(e) à jour le
+Created successfully: Créé(e) avec succés
+Updated successfully: Mise à jour réussie
+Content: Contenu
+Save: Enregistrer
+
+# Page
+Pages list: Liste des pages
+Page title: Titre
+Do you want to delete this Page?: Êtes-vous sûr de vouloir supprimer cette page ?
+No page was found.: Aucune page trouvée.
+Add new page: Créer une page
+New page: Nouvelle page
+new-page: nouvelle-page
+An error occurs when generating or getting the page: Une erreure est survenue lors de la création/modification de la page
+An error occurs when deleting the page: Une erreur est survenue lors de la suppression de la page
+'The page "%name%" successfully deleted': 'La page "%name%" a bien été surppimée'
+Page author: Auteur
+
+# Post
+Posts list: Liste des articles
+Post title: Titre
+Do you want to delete this post?: Êtes-vous sûr de vouloir supprimer cet article ?
+No post was found.: Aucon article de trouvé.
+Add new post: Créer un article
+New post: Nouvel article
+new-post: nouvel-article
+An error occurs when generating or getting the post: Une erreure est survenue lors de la création/modification de l'article
+An error occurs when deleting the post: Une erreur est survenue lors de la suppression de l'article
+'The post "%name%" successfully deleted': "L'article \"%name%\" a bien été surppimé"
+Post author: Auteur

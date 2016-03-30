@@ -52,10 +52,24 @@ class Configuration implements ConfigurationInterface
     	$node = $builder->root('page');
     
     	$node
-	    	->treatTrueLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")))
-	    	->treatFalseLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")))
+	    	->treatTrueLike(array(
+	    		'versionable' => false,
+	    		'signable' => false,
+	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")
+	    	))
+	    	->treatFalseLike(array(
+    			'versionable' => false,
+    			'signable' => false,
+	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")
+	    	))
 	    	->addDefaultsIfNotSet()
 	    	->children()
+	    		->booleanNode('versionable')
+	    			->defaultFalse()
+	    		->end()
+	    		->scalarNode('signable')
+	    			->defaultFalse()
+	    		->end()
 		    	->arrayNode('form')
 			    	->addDefaultsIfNotSet()
 			    	->children()
@@ -86,10 +100,24 @@ class Configuration implements ConfigurationInterface
     	$node = $builder->root('post');
     
     	$node
-	    	->treatTrueLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")))
-	    	->treatFalseLike(array('form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")))
+	    	->treatTrueLike(array(
+    			'versionable' => false,
+    			'signable' => false,
+	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")
+	    	))
+	    	->treatFalseLike(array(
+    			'versionable' => false,
+    			'signable' => false,
+	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")
+	    	))
 	    	->addDefaultsIfNotSet()
 	    	->children()
+		    	->booleanNode('versionable')
+		    		->defaultFalse()
+		    	->end()
+		    	->scalarNode('signable')
+		    		->defaultFalse()
+		    	->end()
 		    	->arrayNode('form')
 			    	->addDefaultsIfNotSet()
 			    	->children()

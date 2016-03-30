@@ -80,9 +80,19 @@ use ASF\DocumentBundle\Model\Post\PostInterface;
 class Post extends Document implements PostInterface {}
 ```
 
-## VersionnableInterface
+## VersionableInterface
 
-DocumentBundle provides a versionning system. If you want to use it, just implements the VersionnableInterface like following :
+DocumentBundle provides a versionning system. If you want to use it, first set it top true in bundle configuration like following :
+
+```yaml
+asf_document:
+    page:
+        versionable: true
+    post:
+        versionable: true
+```
+
+And implements the VersionableInterface like following :
 
 ```php
 <?php
@@ -90,9 +100,53 @@ DocumentBundle provides a versionning system. If you want to use it, just implem
 namespace Acme\DocumentBundle\Entity;
 
 use ASF\DocumentBundle\Model\Page\PageInterface;
-use ASF\DocumentBundle\Model\Document\VersionnableInterface;
+use ASF\DocumentBundle\Model\Document\VersionableInterface;
 
-class Page extends Document implements PageInterface, VersionnableInterface {}
+class Page extends Document implements PageInterface, VersionableInterface
+{
+	/**
+	 * @var Page
+	 */
+	protected $original;
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::getOriginal()
+	 */
+	public function getOriginal()
+	{
+		return $this->original;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::setOriginal()
+	 */
+	public function setOriginal($original)
+	{
+		$this->original = $original;
+		return $this;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::clearId()
+	 */
+	public function clearId()
+	{
+		$this->id = null;
+		return $this;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::__clone()
+	 */
+	public function __clone()
+	{
+		$this->id = null;
+	}
+}
 ```
 
 ```php
@@ -103,7 +157,121 @@ namespace Acme\DocumentBundle\Entity;
 use ASF\DocumentBundle\Model\Post\PostInterface;
 use ASF\DocumentBundle\Model\Document\VersionnableInterface;
 
-class Post extends Document implements PostInterface, VersionnableInterface {}
+class Post extends Document implements PostInterface, VersionableInterface
+{
+	/**
+	 * @var Post
+	 */
+	protected $original;
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::getOriginal()
+	 */
+	public function getOriginal()
+	{
+		return $this->original;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::setOriginal()
+	 */
+	public function setOriginal($original)
+	{
+		$this->original = $original;
+		return $this;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::clearId()
+	 */
+	public function clearId()
+	{
+		$this->id = null;
+		return $this;
+	}
+	
+	/**
+	 * (non-PHPdoc)
+	 * @see \ASF\DocumentBundle\Model\Document\VersionableInterface::__clone()
+	 */
+	public function __clone()
+	{
+		$this->id = null;
+	}
+}
+```
+
+### DocumentAuthorInterface
+
+If you want to link a document to an author, first set it top true in bundle configuration :
+
+```yaml
+asf_document:
+    page:
+        versionable: true
+    post:
+        versionable: true
+```
+
+And your author entity must implements DocumentAuthorInterface :
+
+```php
+<?php
+namespace ASF\DocumentBundle\Model\Document\DocumentAuthorInterface;
+
+interface DocumentAuthorInterface
+{
+	/**
+	 * Get the ID of the author
+	 *
+	 * @return integer
+	 */
+	public function getId();
+	
+	/**
+	 * Get the name of the author
+	 * 
+	 * @return string
+	 */
+	public function getName();
+	
+	/**
+	 * Set the name of the author
+	 * 
+	 * @param \ASF\DocumentBundle\Model\Document\DocumentAuthorInterface $author
+	 * @return \ASF\DocumentBundle\Model\Document\SignableInterface
+	 */
+	public function setName($name);
+```
+
+Implmentation of DocumentAuthorInterface in your author entity :
+
+```php
+<?php
+// @AcmeUserBundle/Entity/User.php
+namespace Acme\UserBundle\Entity;
+
+use ASF\DocumentBundle\Model\Document\DocumentAuthorInterface;
+
+class User implements DocumentAuthorInterface {}
+```
+
+### SignableInterface
+
+The seconde thing to do for link an author to a document is to implements SignableInterfarce in your Document entity :
+
+```php
+<?php
+// @AcmeDocumentBundle/Entity/Post.php
+namespace Acme\DocumentBundle\Entity;
+
+use ASF\DocumentBundle\Model\Post\PostInterface;
+use ASF\DocumentBundle\Model\Document\SignableInterface;
+
+class Post extends Document implements PostInterface, SignableInterface {}
 ```
 
 ### Doctrine ORM
