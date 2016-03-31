@@ -52,9 +52,8 @@ class PageController extends Controller
 		$grid->setSource($source);
 		$tableAlias = $source->getTableAlias(); 
 		$pageClassName = $pageManager->getShortClassName();
-		$authorClassName = $this->getParameter('asf_document.page.signable') !== false ? $this->getParameter('asf_document.page.signable') : false;
 		
-		$source->manipulateQuery(function($query) use ($tableAlias, $pageClassName, $authorClassName) {
+		$source->manipulateQuery(function($query) use ($tableAlias, $pageClassName) {
 			$query instanceof QueryBuilder;
 			
 			// Get all original version of each pages
@@ -114,10 +113,6 @@ class PageController extends Controller
 			->setConfirmMessage($this->get('translator')->trans('Do you want to delete this Page?', array(), 'asf_document'));
 		$grid->addRowAction($delete_action);
 		
-		if ( $this->getParameter('asf_document.page.signable') !== false ) {
-			$grid->getColumn('author')->setTitle($this->get('translator')->trans('Page author', array(), 'asf_document'));
-		}
-		
 		$grid->setNoDataMessage($this->get('translator')->trans('No page was found.', array(), 'asf_document'));
 		
 		return $grid->getGridResponse('ASFDocumentBundle:Page:list.html.twig', array('grid' => $grid));
@@ -139,7 +134,7 @@ class PageController extends Controller
 		if ( !is_null($id) ) {
 			$original = $pageManager->getRepository()->findOneBy(array('id' => $id));
 			
-			if ( $original instanceof VersionableInterface ) {
+			if ( $this->getParameter('asf_document.page.versionable') === true ) {
 				$page = clone $original;
 				$pageManager->getEntityManager()->detach($page);
 				

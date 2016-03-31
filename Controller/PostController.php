@@ -61,9 +61,8 @@ class PostController extends Controller
 		$grid->setSource($source);
 		$tableAlias = $source->getTableAlias();
 		$postClassName = $postManager->getShortClassName();
-		$authorClassName = $this->getParameter('asf_document.post.signable') !== false ? $this->getParameter('asf_document.post.signable') : false;
 		
-		$source->manipulateQuery(function($query) use ($tableAlias, $postClassName, $authorClassName) {
+		$source->manipulateQuery(function($query) use ($tableAlias, $postClassName) {
 			$query instanceof QueryBuilder;
 			
 			// Get all original version of each posts
@@ -95,11 +94,6 @@ class PostController extends Controller
 				$query->add('where', $query->expr()->in($tableAlias.'.id', $ids));
 			}
 			
-			if ( $authorClassName !== false ) {
-				$query->addSelect('a.name AS author_name');
-				$query->leftJoin($tableAlias.'.author', 'a', Expr\Join::WITH, $tableAlias.'.author=a.id');
-			}
-			
 			if ( count($query->getDQLPart('orderBy')) == 0) {
 				$query->orderBy($tableAlias.'.createdAt', 'DESC');
 			}
@@ -129,10 +123,6 @@ class PostController extends Controller
 			->setConfirmMessage($this->get('translator')->trans('Do you want to delete this post?', array(), 'asf_document'));
 		$grid->addRowAction($delete_action);
 		
-		if ( $this->getParameter('asf_document.post.signable') !== false ) {
-			$grid->getColumn('author_name')->setTitle($this->get('translator')->trans('Post author', array(), 'asf_document'));
-		}
-		
 		$grid->setNoDataMessage($this->get('translator')->trans('No post was found.', array(), 'asf_document'));
 		
 		return $grid->getGridResponse('ASFDocumentBundle:Post:list.html.twig', array('grid' => $grid));
@@ -154,7 +144,7 @@ class PostController extends Controller
 		if ( !is_null($id) ) {
 			$original = $postManager->getRepository()->findOneBy(array('id' => $id));
 			
-			if ( $original instanceof VersionableInterface ) {
+			if ( $this->getParameter('asf_document.post.versionable') === true ) {
 				$post = clone $original;
 				$postManager->getEntityManager()->detach($post);
 				if ( is_null($original->getOriginal()) )
@@ -197,7 +187,7 @@ class PostController extends Controller
 				
 			} catch (\Exception $e) {
 				if ( $this->has('asf_layout.flash_message') ) {
-					$this->get('asf_layout.flash_message')->danger($e->getMeesage());
+					$this->get('asf_layout.flash_message')->danger($e->getMessage());
 				}
 			}
 		}
