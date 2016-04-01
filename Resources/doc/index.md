@@ -104,6 +104,7 @@ Now you have completed the basic installation and configuration of the ASFDocume
 The following documents are available :
 * [Overriding default ASFDocumentBundle Templates](templates.md)
 * [Overriding Default ASFDocumentBundle Forms](forms.md)
+* [Event system in controllers](controllers.md)
 * [Bundle's entities](entities.md)
 * [ASFDocumentBundle embedded Entity Manager](entity-manager.md)
 * [ASFDocumentBundle Configuration Reference](configuration.md)
