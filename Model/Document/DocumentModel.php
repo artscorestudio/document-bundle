@@ -222,4 +222,12 @@ abstract class DocumentModel implements DocumentInterface
 			self::STATE_PUBLISHED
 		);
 	}
+	
+	/**
+	 * Do stuff on prePersist
+	 */
+	public function onPrePersist()
+	{
+		$this->createdAt = new \DateTime();
+	}
 }

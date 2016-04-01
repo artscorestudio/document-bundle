@@ -12,6 +12,7 @@ namespace ASF\DocumentBundle\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use ASF\DocumentBundle\Model\Document\DocumentModel;
 
 /**
  * Page Entity Repository
@@ -44,6 +45,23 @@ class PageRepository extends EntityRepository
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Get all pages in their last version
+	 */
+	public function getAllLastVersion()
+	{
+		$qb = $this->createQueryBuilder('p');
+		$qb->where('p.original IS NULL AND p.state=:state')
+			->setParameter(':state', DocumentModel::STATE_PUBLISHED);
+		
+		$result = $qb->getQuery()->getResult();
+		$return = array();
+		foreach($result as $original) {
+			$return[] = $this->getLastVersion($original->getId());
+		}
+		return $return;
 	}
 	
 	/**

@@ -72,7 +72,6 @@ class PageController extends Controller
 						->orderBy('p.createdAt', 'DESC')
 						->setParameter('original_id', $original['id']);
 					$r = $qb->getQuery()->setMaxResults(1)->getResult();
-					
 					if ( count($r) ) {
 						$ids[] = $r[0]->getId();
 					} else {
