@@ -21,8 +21,7 @@ use Doctrine\ORM\QueryBuilder;
 
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 use ASF\DocumentBundle\Event\DocumentEvents;
-use ASF\DocumentBundle\Form\Type\PageFormType;
-use ASF\DocumentBundle\Model\Document\VersionableInterface;
+use ASF\DocumentBundle\Event\PageEvent;
 
 /**
  * Artscore Studio Page Controller
@@ -164,6 +163,9 @@ class PageController extends Controller
 		
 		if ( $form->isSubmitted() && $form->isValid() ) {
 			try {
+				
+				$this->get('event_dispatcher')->dispatch(DocumentEvents::PAGE_EDIT_SUCCESS, new PageEvent($page));
+				
 				if ( is_null($page->getId()) ) {
 					$pageManager->getEntityManager()->persist($page);
 				}

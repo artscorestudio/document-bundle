@@ -10,28 +10,20 @@
 namespace ASF\DocumentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\HttpFoundation\Request;
 
 use APY\DataGridBundle\Grid\Source\Entity;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Action\RowAction;
 
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Query\Expr;
 
 use ASF\DocumentBundle\Entity\Post;
-use ASF\DocumentBundle\Event\DocumentEvents;
-use ASF\DocumentBundle\Event\PostEditorEvent;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
-
-use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
-use Symfony\Component\Security\Acl\Permission\MaskBuilder;
-use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use ASF\DocumentBundle\Model\Document\VersionableInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Doctrine\ORM\Query\Expr;
-use APY\DataGridBundle\Grid\Column\Column;
+use ASF\DocumentBundle\Event\DocumentEvents;
+use ASF\DocumentBundle\Event\PostEvent;
 
 /**
  * Artscore Studio Post Controller
@@ -174,6 +166,8 @@ class PostController extends Controller
 		
 		if ( $form->isSubmitted() && $form->isValid() ) {
 			try {
+				$this->get('event_dispatcher')->dispatch(DocumentEvents::POST_EDIT_SUCCESS, new PostEvent($post));
+				
 				if ( is_null($post->getId()) ) {
 					$postManager->getEntityManager()->persist($post);
 				}

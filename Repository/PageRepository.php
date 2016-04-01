@@ -11,6 +11,7 @@ namespace ASF\DocumentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 /**
  * Page Entity Repository
@@ -43,5 +44,21 @@ class PageRepository extends EntityRepository
 		}
 		
 		return $result;
+	}
+	
+	/**
+	 * Find page by slug
+	 *
+	 * @param string $path
+	 */
+	public function findBySlug($path)
+	{
+		$qb = $this->createQueryBuilder('p');
+		$qb instanceof QueryBuilder;
+	
+		$qb->add('where', $qb->expr()->like('p.slug', $qb->expr()->lower(':searched_term')))
+			->setParameter('searched_term', $path);
+	
+		return $qb->getQuery()->getResult();
 	}
 }
