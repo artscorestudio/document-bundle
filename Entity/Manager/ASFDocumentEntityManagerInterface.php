@@ -9,13 +9,15 @@
  */
 namespace ASF\DocumentBundle\Entity\Manager;
 
+use ASF\CoreBundle\Entity\Manager\ASFEntityManagerInterface;
+
 /**
  * Document Manager Interface
  * 
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-interface ASFDocumentEntityManagerInterface
+interface ASFDocumentEntityManagerInterface extends ASFEntityManagerInterface
 {
     /**
      * Return the entity class name
