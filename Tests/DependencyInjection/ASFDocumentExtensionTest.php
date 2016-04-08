@@ -22,7 +22,7 @@ class ASFDocumentExtensionTest extends \PHPUnit_Framework_TestCase
 	/**
 	 * @var \ASF\LayoutBundle\DependencyInjection\ASFLayoutExtension
 	 */
-	protected $extension;
+	private $extension;
 	
 	/**
 	 * {@inheritDoc}
@@ -36,7 +36,7 @@ class ASFDocumentExtensionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Test the load method in bundle's extension
+	 * @covers ASF\DocumentBundle\DependencyInjection\ASFDocumentExtension::load
 	 */
 	public function testLoadExtension()
 	{
@@ -44,14 +44,21 @@ class ASFDocumentExtensionTest extends \PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * Return bundle's default configuration
-	 * 
-	 * @return array
+	 * @covers ASF\DocumentBundle\DependencyInjection\ASFDocumentExtension::prepend
 	 */
-	protected function getDefaultConfig()
+	public function testPrependExtension()
 	{
-	    return array(
-	        'enable_asf_support' => true
-	    );
+		$this->extension->prepend($this->getContainer());
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\ASFDocumentExtension::configureTwigBundle
+	 */
+	public function testConfigureTwigBundle()
+	{
+		$container = new ContainerBuilder();
+		$this->extension->configureTwigBundle($container, array(
+			'asf_document' => array('form_theme' => 'ASFDocumentBundle:Form:fields.html.twig') 
+		));
 	}
 }

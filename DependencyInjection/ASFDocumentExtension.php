@@ -83,7 +83,7 @@ class ASFDocumentExtension extends Extension implements PrependExtensionInterfac
     		switch($name) {
     			case 'twig':
     				$container->prependExtensionConfig($name, array(
-    				'form_themes' => array($config['form_theme'])
+    					'form_themes' => array($config['form_theme'])
     				));
     				break;
     		}

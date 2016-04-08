@@ -21,12 +21,83 @@ use ASF\DocumentBundle\DependencyInjection\Configuration;
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Check if asf_layout.enable_twig_support is set to true by default
-     */
-	public function testEnableASFSupportParameterInDefaultConfiguration()
+	 * @var array
+	 */
+	private $defaultConfig;
+	
+	/**
+	 * {@inheritDoc}
+	 * @see PHPUnit_Framework_TestCase::setUp()
+	 */
+	public function setUp()
 	{
 		$processor = new Processor();
-		$config = $processor->processConfiguration(new Configuration(), array());
-		$this->assertFalse($config['enable_asf_support']);
+		$this->defaultConfig = $processor->processConfiguration(new Configuration(), array());
+	}
+	
+    /**
+     * @covers ASF\DocumentBundle\DependencyInjection\Configuration
+     */
+	public function testDefaultConfiguration()
+	{
+		$this->assertCount(3, $this->defaultConfig);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration
+	 */
+	public function testFormThemeParameter()
+	{
+		$this->assertEquals('ASFDocumentBundle:Form:fields.html.twig', $this->defaultConfig['form_theme']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPageParameterNode
+	 */
+	public function testPageLoadFormName()
+	{
+		$this->assertEquals('ASF\DocumentBundle\Form\Type\PageType', $this->defaultConfig['page']['form']['type']);
+		$this->assertEquals('page_type', $this->defaultConfig['page']['form']['name']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPageParameterNode
+	 */
+	public function testPageVersionableParameter()
+	{
+		$this->assertFalse($this->defaultConfig['page']['versionable']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPageParameterNode
+	 */
+	public function testPageSignableParameter()
+	{
+		$this->assertFalse($this->defaultConfig['page']['signable']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPostParameterNode
+	 */
+	public function testPostLoadFormName()
+	{
+		$this->assertEquals('ASF\DocumentBundle\Form\Type\PostType', $this->defaultConfig['post']['form']['type']);
+		$this->assertEquals('post_type', $this->defaultConfig['post']['form']['name']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPostParameterNode
+	 */
+	public function testPostVersionableParameter()
+	{
+		$this->assertFalse($this->defaultConfig['post']['versionable']);
+	}
+	
+	/**
+	 * @covers ASF\DocumentBundle\DependencyInjection\Configuration::addPostParameterNode
+	 */
+	public function testPostSignableParameter()
+	{
+		$this->assertFalse($this->defaultConfig['post']['signable']);
 	}
 }
