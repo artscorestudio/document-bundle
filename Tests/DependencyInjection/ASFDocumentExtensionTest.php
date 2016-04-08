@@ -61,4 +61,60 @@ class ASFDocumentExtensionTest extends \PHPUnit_Framework_TestCase
 			'asf_document' => array('form_theme' => 'ASFDocumentBundle:Form:fields.html.twig') 
 		));
 	}
+
+	/**
+	 * Return a mock object of ContainerBuilder
+	 *
+	 * @return \Symfony\Component\DependencyInjection\ContainerBuilder
+	 */
+	protected function getContainer($bundles = null, $extensions = null)
+	{
+		$bag = $this->getMock('Symfony\Component\DependencyInjection\ParameterBag\ParameterBag');
+		$bag->method('add');
+
+		$container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+		$container->method('getParameter');
+		$container->method('getExtensions');
+	
+		$container->method('getExtensionConfig')->willReturn(array());
+		$container->method('prependExtensionConfig');
+		$container->method('setAlias');
+		$container->method('getExtension');
+			
+		$container->method('addResource');
+		$container->method('setParameter');
+		$container->method('getParameterBag')->willReturn($bag);
+		$container->method('setDefinition');
+		$container->method('setParameter');
+	
+		return $container;
+	}
+	
+	/**
+	 * Return bundle's default configuration
+	 *
+	 * @return array
+	 */
+	protected function getDefaultConfig()
+	{
+		return array(
+			'form_theme' => 'ASFDocumentBundle:Form:fields.html.twig',
+			'page' => array(
+				'versionable' => true,
+				'signable' => true,
+				'form' => array(
+					'type' => "ASF\DocumentBundle\Form\Type\PageType",
+					'name' => 'page_type'
+				)
+			),
+			'post' => array(
+				'versionable' => true,
+				'signable' => true,
+				'form' => array(
+					'type' => "ASF\DocumentBundle\Form\Type\PostType",
+					'name' => 'post_type'
+				)
+			)
+		);
+	}
 }

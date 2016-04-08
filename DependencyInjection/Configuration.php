@@ -55,12 +55,18 @@ class Configuration implements ConfigurationInterface
 	    	->treatTrueLike(array(
 	    		'versionable' => false,
 	    		'signable' => false,
-	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")
+	    		'form' => array(
+	    			'type' => "ASF\DocumentBundle\Form\Type\PageType",
+	    			'name' => 'page_type'
+	    		)
 	    	))
 	    	->treatFalseLike(array(
     			'versionable' => false,
     			'signable' => false,
-	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PageType")
+	    		'form' => array(
+	    			'type' => "ASF\DocumentBundle\Form\Type\PageType",
+	    			'name' => 'page_type'
+	    		)
 	    	))
 	    	->addDefaultsIfNotSet()
 	    	->children()
@@ -103,12 +109,18 @@ class Configuration implements ConfigurationInterface
 	    	->treatTrueLike(array(
     			'versionable' => false,
     			'signable' => false,
-	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")
+	    		'form' => array(
+	    			'type' => "ASF\DocumentBundle\Form\Type\PostType",
+	    			'name' => 'post_type'
+	    		)
 	    	))
 	    	->treatFalseLike(array(
     			'versionable' => false,
     			'signable' => false,
-	    		'form' => array('type' => "ASF\DocumentBundle\Form\Type\PostType")
+	    		'form' => array(
+	    			'type' => "ASF\DocumentBundle\Form\Type\PostType",
+	    			'name' => 'post_type'
+	    		)
 	    	))
 	    	->addDefaultsIfNotSet()
 	    	->children()
