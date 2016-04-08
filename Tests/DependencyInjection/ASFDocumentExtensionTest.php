@@ -10,6 +10,7 @@
 namespace ASF\DocumentBundle\Tests\DependencyInjection;
 
 use ASF\DocumentBundle\DependencyInjection\ASFDocumentExtension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Bundle's Extension Test Suites
