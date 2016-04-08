@@ -83,7 +83,7 @@ class PageType extends BaseFormType
 }
 ```
 
-All entity managers provided in this bundle are based on [ASFEntityManager provided by ASFCoreBundle](https://github.com/artscorestudio/core-bundle/blob/master/Resources/doc/entity-manager.md). If you do not want to install ASFCoreBUndle, you have to create your own Entity Manager implementing the ASFDocumentEntityManagerInterface and overriding the Page Entity Manager class parameter.
+All entity managers provided in this bundle are based on [ASFEntityManager provided by ASFCoreBundle][1]. If you do not want to install ASFCoreBUndle, you have to create your own Entity Manager implementing the ASFDocumentEntityManagerInterface and overriding the Page Entity Manager class parameter.
 
 ### Default Page Entity Manager
 ```xml
@@ -181,3 +181,5 @@ class AcmeDocumentExtension extends Extension
     }
 }
 ```
+
+[1]: https://github.com/artscorestudio/core-bundle/blob/master/Resources/doc/entity-manager.md

@@ -9,7 +9,7 @@ asf_document:
     page:
         form:
             type: Acme\DocumentBundle\Form\Type\PageType
-            name! acme_page_type
+            name: acme_page_type
 ```
 
 ```php

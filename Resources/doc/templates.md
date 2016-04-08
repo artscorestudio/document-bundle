@@ -7,7 +7,7 @@ As you start to incorporate ASFDocumentBundle into your application, you will pr
 
 ## Example: Overriding The Default layout.html.twig
 
-It is highly recommended that you override the Resources/views/layout.html.twig template so that the pages provided by the ASFDocumentBundle have a similar look and feel to the rest of your application. An example of overriding this layout template is demonstrated below using both of the overriding options listed above.
+It is highly recommended that you override the *Resources/views/layout.html.twig* template so that the pages provided by the ASFDocumentBundle have a similar look and feel to the rest of your application. An example of overriding this layout template is demonstrated below using both of the overriding options listed above.
 
 Here is the default layout.html.twig provided by the ASFDocumentBundle :
 
@@ -27,7 +27,7 @@ As you can see its pretty basic and doesn't really have much structure, so you w
 
 ### Define New Template In app/Resources
 
-The easiest way to override a bundle's template is to simply place a new one in your app/Resources folder. To override the layout template located at Resources/views/layout.html.twig in the ASFDocumentBundle directory, you would place your new layout template at app/Resources/ASFDocumentBundle/views/layout.html.twig.
+The easiest way to override a bundle's template is to simply place a new one in your app/Resources folder. To override the layout template located at Resources/views/layout.html.twig in the ASFDocumentBundle directory, you would place your new layout template at *app/Resources/ASFDocumentBundle/views/layout.html.twig*.
 
 ### Create A Child Bundle And Override Template
 

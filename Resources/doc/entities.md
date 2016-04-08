@@ -19,7 +19,7 @@ class AcmeDocumentBundle extends Bundle
 }
 ```
 
-For more information about bundle inheritance, check [Symfony documentation](http://symfony.com/doc/current/cookbook/bundles/inheritance.html).
+For more information about bundle inheritance, check [Symfony documentation][1].
 
 ## DocumentModel and DocumentInterface
 
@@ -277,3 +277,5 @@ class Post extends Document implements PostInterface, SignableInterface {}
 ### Doctrine ORM
 
 The bundle provides a set of *.orm.xml files for define schema in folder *@ASFDocumentBundle/Resources/config/doctrine-mapping*.
+
+[1]: http://symfony.com/doc/current/cookbook/bundles/inheritance.html

@@ -9,7 +9,7 @@ What is a document in this bundle ? A document can be an HTML page, a PDF, an XM
 ## Prerequisites
 
 This version of the bundle requires :
-* Symfony 2.8+/3.0+
+* [Symfony 2.8+ LTS / 3.0+][1]
 
 ### Translations
 
@@ -21,7 +21,7 @@ framework:
     translator: ~
 ```
 
-For more information about translations, check [Symfony documentation](https://symfony.com/doc/current/book/translation.html).
+For more information about translations, check [Symfony documentation][2].
 
 ## Installation
 
@@ -66,7 +66,7 @@ asf_document:
         versionable: true    # Default : false. This is for enable versioning for Post entities
         signable: true       # Default : false. This is for link a Post to an author
 ```
-For more information about the versioning system and author attribute in bundle's entities, check [Bundle's Entities](entities.md).
+For more information about the versioning system and author attribute in bundle's entities, check [ASFDocumentBundle Entities][3].
 
 ### Step 4 : Import ASFDocumentBundle routes
 
@@ -78,7 +78,7 @@ asf_document:
 
 ### Step 5 : Extends the bundle
 
-DocumentBundle is an *abstract* bundle. You have to create an inherited bundle :
+DocumentBundle is an *abstract* bundle. You have to create an inherited bundle for the persistance of entities :
 
 ```php
 <?php
@@ -95,16 +95,28 @@ class AcmeDemoBundle extends Bundle
 }
 ```
 
-For more information about bundle inheritance, check [Symfony documentation](http://symfony.com/doc/current/cookbook/bundles/inheritance.html).
+For further informations about bundle's entities, see [ASFDocumentBundle Entities][3].
+
+For more information about bundle inheritance, check [Symfony documentation][4].
 
 ### Next Steps
 
 Now you have completed the basic installation and configuration of the ASFDocumentBundle, you are ready to learn about more advanced features and usages of the bundle.
 
 The following documents are available :
-* [Overriding default ASFDocumentBundle Templates](templates.md)
-* [Overriding Default ASFDocumentBundle Forms](forms.md)
-* [Event system in controllers](controllers.md)
-* [Bundle's entities](entities.md)
-* [ASFDocumentBundle embedded Entity Manager](entity-manager.md)
-* [ASFDocumentBundle Configuration Reference](configuration.md)
+* [Overriding default ASFDocumentBundle Templates][5]
+* [Overriding Default ASFDocumentBundle Forms][6]
+* [Event system in controllers][7]
+* [ASFDocumentBundle entities][3]
+* [ASFDocumentBundle embedded Entity Manager][8]
+* [ASFDocumentBundle Configuration Reference][9]
+
+[1]:  https://symfony.com/download
+[2]:  https://symfony.com/doc/current/book/translation.html
+[3]:  entities.md
+[4]:  http://symfony.com/doc/current/cookbook/bundles/inheritance.html
+[5]:  templates.md
+[6]:  forms.md
+[7]:  controllers.md
+[8]:  entity-manager.md
+[9]:  configuration.md
