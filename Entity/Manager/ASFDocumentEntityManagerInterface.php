@@ -9,7 +9,7 @@
  */
 namespace ASF\DocumentBundle\Entity\Manager;
 
-use ASF\CoreBundle\Entity\Manager\ASFEntityManagerInterface;
+use ASF\CoreBundle\Utils\Manager\ASFEntityManagerInterface;
 
 /**
  * Document Manager Interface
