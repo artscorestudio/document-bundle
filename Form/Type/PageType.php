@@ -14,7 +14,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use ASF\DocumentBundle\Model\Document\DocumentModel;
-use ASF\DocumentBundle\Entity\Manager\ASFDocumentEntityManagerInterface;
+use ASF\DocumentBundle\Utils\Manager\DefaultManagerInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -29,14 +29,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 class PageType extends AbstractType
 {
 	/**
-	 * @var ASFDocumentEntityManagerInterface
+	 * @var DefaultManagerInterface
 	 */
 	protected $pageManager;
 	
 	/**
-	 * @param ASFDocumentEntityManagerInterface $pageManager
+	 * @param DefaultManagerInterface $pageManager
 	 */
-	public function __construct(ASFDocumentEntityManagerInterface $pageManager)
+	public function __construct(DefaultManagerInterface $pageManager)
 	{
 		$this->pageManager = $pageManager;
 	}

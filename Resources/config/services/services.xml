@@ -7,7 +7,7 @@
 	<parameters>
 		
 		<!-- Generic Entity Manager -->
-    	<parameter key="asf_document.entity.manager.class">ASF\DocumentBundle\Entity\Manager\ASFDocumentEntityManager</parameter>
+    	<parameter key="asf_document.default.manager.class">ASF\DocumentBundle\Utils\Manager\DefaultManager</parameter>
 		
 		<!-- Form Factory -->
 		<parameter key="asf_document.form.factory.class">ASF\DocumentBundle\Form\Factory\FormFactory</parameter>

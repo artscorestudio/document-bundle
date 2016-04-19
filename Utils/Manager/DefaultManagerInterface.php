@@ -7,17 +7,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace ASF\DocumentBundle\Entity\Manager;
+namespace ASF\DocumentBundle\Utils\Manager;
 
-use ASF\CoreBundle\Utils\Manager\ASFEntityManagerInterface;
+use ASF\CoreBundle\Utils\Manager\ASFManagerInterface;
 
 /**
- * Document Manager Interface
+ * Generic Manager Interface for this bundle
  * 
  * @author Nicolas Claverie <info@artscore-studio.fr>
  *
  */
-interface ASFDocumentEntityManagerInterface extends ASFEntityManagerInterface
+interface DefaultManagerInterface extends ASFManagerInterface
 {
     /**
      * Return the entity class name

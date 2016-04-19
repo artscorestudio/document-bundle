@@ -17,7 +17,7 @@
     <services>
         
         <!-- Page Entity Manager -->
-        <service id="asf_document.page.manager" class="%asf_document.entity.manager.class%">
+        <service id="asf_document.page.manager" class="%asf_document.default.manager.class%">
             <tag name="asf_core.manager" entity="%asf_document.page.entity.class%" />
         </service>
         

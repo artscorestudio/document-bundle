@@ -14,7 +14,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use ASF\DocumentBundle\Model\Document\DocumentModel;
-use ASF\DocumentBundle\Entity\Manager\ASFDocumentEntityManagerInterface;
+use ASF\DocumentBundle\Utils\Manager\DefaultManagerInterface;
+
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -29,14 +30,14 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 class PostType extends AbstractType
 {
 	/**
-	 * @var ASFDocumentEntityManagerInterface
+	 * @var DefaultManagerInterface
 	 */
 	protected $postMaganer;
 	
 	/**
-	 * @param ASFDocumentEntityManagerInterface $postManager
+	 * @param DefaultManagerInterface $postManager
 	 */
-	public function __construct($postManager)
+	public function __construct(DefaultManagerInterface $postManager)
 	{
 		$this->postManager = $postManager;
 	}
