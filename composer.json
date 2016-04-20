@@ -17,10 +17,30 @@
 	],
 	"require" : {
 		"php": ">=5.5.9",
-        "symfony/framework-bundle": "~2.8|~3.0"
+		
+        "symfony/framework-bundle": "~2.8|~3.0",
+        "symfony/expression-language": "~2.8|~3.0",
+        "symfony/browser-kit": "~2.8|~3.0",
+        "symfony/css-selector": "~2.8|~3.0",
+        "symfony/twig-bundle": "~2.3|~3.0",
+        "symfony/event-dispatcher": "~2.8|~3.0",
+        "symfony/form": "~2.3|~3.0",
+        "symfony/assetic-bundle": "^2.7",
+        
+        "doctrine/orm": "~2.4|^2.5",
+        "doctrine/doctrine-bundle": "^1.6",
+        "doctrine/doctrine-cache-bundle": "~1.0|^1.2",
+        
+        "twig/twig": "~1.10",
+        
+        "artscorestudio/core-bundle": "dev-master"
 	},
 	"require-dev" : {
-	    
+	    "friendsofsymfony/user-bundle": "~2.0@dev",
+	    "symfony/security": "~2.8|~3.0",
+        "symfony/security-csrf": "~2.8|~3.0",
+        "symfony/swiftmailer-bundle": "^2.3",
+        "artscorestudio/user-bundle": "dev-master"
 	},
 	"autoload" : {
 		"psr-4" : {
