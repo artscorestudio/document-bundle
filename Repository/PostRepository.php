@@ -11,6 +11,9 @@ namespace ASF\DocumentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
+use ASF\BlogBundle\Model\Category\CategoryInterface;
+use ASF\DocumentBundle\Model\Document\DocumentModel;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Post Entity Repository
@@ -21,23 +24,23 @@ use Doctrine\ORM\Query;
 class PostRepository extends EntityRepository
 {
 	/**
-	 * Get last version for a page
+	 * Get last version for a post
 	 * 
 	 * @param integer $id AsfDocumentBundle:Page  ID
 	 */
-	public function getLastVersion($page_id)
+	public function getLastVersion($post_id)
 	{
 		$qb = $this->createQueryBuilder('p');
 		
-		$qb->where('ASFDocumentBundle:Post', 'o', 'p.original=:page_id')
+		$qb->where('p.original=:post_id')
 			->orderBy('p.createdAt', 'DESC')
-			->setParameter(':page_id', $page_id);
+			->setParameter(':post_id', $post_id);
 		
 		$result = $qb->getQuery()->setMaxResults(1)->getResult(Query::HYDRATE_OBJECT);
 		
 		if ( is_null($result) ) {
 			$qb2 = $this->createQueryBuilder('p');
-			$qb2->where('p.id=:page_id')->setParameter(':page_id', $page_id);
+			$qb2->where('p.id=:post_id')->setParameter(':post_id', $post_id);
 			
 			$result = $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);
 		}
@@ -46,18 +49,41 @@ class PostRepository extends EntityRepository
 	}
 	
 	/**
-	 * Get all pages in their last version
+	 * Get all posts in their last version
 	 */
 	public function getAllLastVersion()
 	{
 		$qb = $this->createQueryBuilder('p');
 		$qb->where('p.original IS NULL AND p.state=:state')
 			->setParameter(':state', DocumentModel::STATE_PUBLISHED);
-	
+		
 		$result = $qb->getQuery()->getResult();
 		$return = array();
 		foreach($result as $original) {
 			$return[] = $this->getLastVersion($original->getId());
+		}
+		return $return;
+	}
+	
+	/**
+	 * Return posts by category (in their last version)
+	 * 
+	 * @param CategoryInterface $category
+	 */
+	public function findByCategory(CategoryInterface $category)
+	{
+		$qb = $this->createQueryBuilder('p');
+		$qb->where('p.original is NULL')
+			->andWhere('p.state=:state')
+			->andWhere('cat.id=:categoryId')
+			->leftJoin('ASWBlogBundle:Category', 'cat', Expr\Join::WITH, 'p.category=cat.id')
+			->setParameter(':state', DocumentModel::STATE_PUBLISHED)
+			->setParameter(':categoryId', $category->getId());
+		
+		$result = $qb->getQuery()->getResult();
+		$return = array();
+		foreach($result as $original) {
+			$return[] = $this->getLastVersion($original->getId())[0];
 		}
 		return $return;
 	}

@@ -25,26 +25,26 @@ class PageRepository extends EntityRepository
 	/**
 	 * Get last version for a page
 	 * 
-	 * @param integer $id AsfDocumentBundle:Page  ID
+	 * @param integer $id ASFDocumentBundle:Page  ID
 	 */
 	public function getLastVersion($page_id)
 	{
 		$qb = $this->createQueryBuilder('p');
 		
-		$qb->where('ASFDocumentBundle:Page', 'o', 'p.original=:page_id')
+		$qb->where('p.original=:page_id')
 			->orderBy('p.createdAt', 'DESC')
 			->setParameter(':page_id', $page_id);
 		
-		$result = $qb->getQuery()->setMaxResults(1)->getResult(Query::HYDRATE_OBJECT);
-		
+		$result = $qb->getQuery()->setMaxResults(1)->getResult();
+
 		if ( is_null($result) ) {
 			$qb2 = $this->createQueryBuilder('p');
 			$qb2->where('p.id=:page_id')->setParameter(':page_id', $page_id);
 			
-			$result = $qb->getQuery()->getResult(Query::HYDRATE_OBJECT);
+			$result = $qb->getQuery()->getResult();
 		}
 		
-		return $result;
+		return $result[0];
 	}
 	
 	/**
