@@ -90,14 +90,14 @@ class ASFDocumentExtensionTest extends \PHPUnit_Framework_TestCase
 		}
 		
 		$container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
-		$container->method('getParameter');
-		$container->method('getExtensions');
-	
+		$container->method('getParameter')->with('kernel.bundles')->willReturn($bundles);
+		$container->method('getExtensions')->willReturn($extensions);
+
 		$container->method('getExtensionConfig')->willReturn(array());
 		$container->method('prependExtensionConfig');
 		$container->method('setAlias');
 		$container->method('getExtension');
-			
+		 
 		$container->method('addResource');
 		$container->method('setParameter');
 		$container->method('getParameterBag')->willReturn($bag);
