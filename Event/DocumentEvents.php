@@ -30,4 +30,18 @@ final class DocumentEvents
 	 * @var string
 	 */
 	const POST_EDIT_SUCCESS = 'asf_document.post.edit.success';
+	
+	/**
+	 * Page Grid object for change its configuration (list view)
+	 * 
+	 * @var string
+	 */
+	const PAGE_GRID_CONFIG = 'asf_document.page.grid.config';
+	
+	/**
+	 * Post Grid object for change its configuration (list view)
+	 *
+	 * @var string
+	 */
+	const POST_GRID_CONFIG = 'asf_document.post.grid.config';
 }

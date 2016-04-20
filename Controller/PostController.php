@@ -24,6 +24,7 @@ use ASF\DocumentBundle\Entity\Post;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 use ASF\DocumentBundle\Event\DocumentEvents;
 use ASF\DocumentBundle\Event\PostEvent;
+use ASF\DocumentBundle\Event\PostGridEvent;
 
 /**
  * Artscore Studio Post Controller
@@ -92,6 +93,8 @@ class PostController extends Controller
 		});
 		
 		// Grid Columns configuration
+		$this->get('event_dispatcher')->dispatch(DocumentEvents::POST_GRID_CONFIG, new PostGridEvent($grid, $source));
+		
 		$grid->getColumn('id')->setVisible(false);
 		$grid->getColumn('title')->setTitle($this->get('translator')->trans('Post title', array(), 'asf_document'));
 		$grid->getColumn('content')->setVisible(false);

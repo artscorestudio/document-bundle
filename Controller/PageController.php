@@ -22,6 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
 use ASF\DocumentBundle\Event\DocumentEvents;
 use ASF\DocumentBundle\Event\PageEvent;
+use ASF\DocumentBundle\Event\PageGridEvent;
 
 /**
  * Artscore Studio Page Controller
@@ -88,6 +89,8 @@ class PageController extends Controller
 		});
 		
 		// Grid Columns configuration
+		$this->get('event_dispatcher')->dispatch(DocumentEvents::PAGE_GRID_CONFIG, new PageGridEvent($grid, $source));
+		
 		$grid->getColumn('id')->setVisible(false);
 		$grid->getColumn('title')->setTitle($this->get('translator')->trans('Page title', array(), 'asf_document'));
 		$grid->getColumn('content')->setVisible(false);
