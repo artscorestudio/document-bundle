@@ -11,9 +11,7 @@ namespace ASF\DocumentBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
-use ASF\BlogBundle\Model\Category\CategoryInterface;
 use ASF\DocumentBundle\Model\Document\DocumentModel;
-use Doctrine\ORM\Query\Expr;
 
 /**
  * Post Entity Repository
@@ -61,29 +59,6 @@ class PostRepository extends EntityRepository
 		$return = array();
 		foreach($result as $original) {
 			$return[] = $this->getLastVersion($original->getId());
-		}
-		return $return;
-	}
-	
-	/**
-	 * Return posts by category (in their last version)
-	 * 
-	 * @param CategoryInterface $category
-	 */
-	public function findByCategory(CategoryInterface $category)
-	{
-		$qb = $this->createQueryBuilder('p');
-		$qb->where('p.original is NULL')
-			->andWhere('p.state=:state')
-			->andWhere('cat.id=:categoryId')
-			->leftJoin('ASWBlogBundle:Category', 'cat', Expr\Join::WITH, 'p.category=cat.id')
-			->setParameter(':state', DocumentModel::STATE_PUBLISHED)
-			->setParameter(':categoryId', $category->getId());
-		
-		$result = $qb->getQuery()->getResult();
-		$return = array();
-		foreach($result as $original) {
-			$return[] = $this->getLastVersion($original->getId())[0];
 		}
 		return $return;
 	}
