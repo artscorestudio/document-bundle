@@ -31,7 +31,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "~1.0|^1.2",
         
-        "twig/twig": "~1.10",
+        "twig/twig": "~1.10"
         
 	},
 	"require-dev" : {
