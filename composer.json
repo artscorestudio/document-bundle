@@ -33,7 +33,6 @@
         
         "twig/twig": "~1.10",
         
-        "artscorestudio/core-bundle": "dev-master"
 	},
 	"require-dev" : {
 	    "friendsofsymfony/user-bundle": "~2.0@dev",
